@@ -1,0 +1,646 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+    font-family: 'San Francisco', sans-serif;
+    background-image: url('background.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    backdrop-filter: blur(5px);
+    transition: opacity 0.3s ease-in-out;
+}
+
+#startScreen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px auto;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.316);
+    max-width: 800px;
+    width: 100%;
+    text-align: left;
+    background-color: rgba(255, 255, 255, 0.342);
+}
+
+.toggle {
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+    margin-bottom: 10px;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    background-color: rgba(255, 255, 255, 0.814);
+    font-weight: bold;
+    font-size: 18px;
+    color: black;
+    transition: all 0.3s ease, transform 0.3s ease;
+}
+
+.toggle:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+}
+
+.resizable {
+    width: calc(100% - 24px);
+    height: 200px;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    font-family: inherit;
+    overflow: auto;
+    resize: vertical;
+    border: none;
+    margin: 12px;
+    transition: height 0.5s ease, padding 0.5s ease, opacity 0.5s ease;
+    background-color: rgba(255, 255, 255, 0.57);
+    color: rgba(0, 0, 0, 0.883);
+}
+
+.resizable.closed {
+    height: 0;
+    padding: 0;
+    opacity: 0;
+}
+
+iframe {
+    width: calc(100% - 36px);
+    height: 300px;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    border: none;
+    position: relative;
+    z-index: 1;
+    background-color: rgba(255, 255, 255, 0.55);
+    padding: 12px;
+    transition: all 0.5s ease;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 18px;
+    width: 100%;
+    padding: 12px;
+    box-sizing: border-box;
+}
+button {
+    padding: 15px 25px;
+border-radius: 5px;
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+transition: all 0.3s ease;
+font-size: 17px;
+margin: 0 12px;
+background-color: rgba(255, 255, 255, 0.541);
+color: black;
+border: none; /* ボタンの枠線を消す */
+}
+.expand-btn, .reset-btn, .copy-download-btn, #reloadBtn {
+padding: 15px 25px;
+border-radius: 5px;
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+transition: all 0.3s ease;
+font-size: 17px;
+margin: 0 12px;
+background-color: rgba(255, 255, 255, 0.541);
+color: black;
+border: none; /* ボタンの枠線を消す */
+}
+
+.expand-btn:hover,
+.reset-btn:hover,
+.copy-download-btn:hover,
+#reloadBtn:hover {
+text-shadow: 2px 3px 8px rgba(0, 0, 0, 0.303);
+transform: scale(1.11);
+}
+
+.preview-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 0.366);
+    z-index: 9;
+    display: none;
+    backdrop-filter: blur(10px);
+}
+
+.preview-expanded {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 88vw;
+    height: 88vh;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    transition: all 0.5s ease;
+    background-color: rgba(255, 255, 255, 0.55);
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: rgb(255, 255, 255);
+    color: black;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    z-index: 11;
+    border: none; /* ボタンの枠線を消す */
+}
+
+.close-btn:hover {
+    background-color: rgba(240, 240, 240, 1);
+    transform: scale(1.1);
+}
+
+pre {
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 5px;
+    overflow-x: auto;
+    margin: 0;
+}
+
+code {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.syntax-html {
+    color: blue;
+}
+
+.syntax-css {
+    color: green;
+}
+
+.syntax-js {
+    color: brown;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: black;
+    }
+
+
+
+    #startScreen {
+        background: rgba(0, 0, 0, 0.55);
+        color: white;
+    }
+
+    .toggle {
+        background-color: rgb(0, 0, 0);
+        color: white;
+    }
+
+    .resizable {
+        background-color: rgba(50, 50, 50, 0.647);
+        color: rgba(255, 255, 255, 0.738);
+    }
+
+    .expand-btn {
+        background-color: rgb(0, 0, 0);
+        color: white;
+    }
+
+    .close-btn {
+        background-color: black;
+        color: rgba(255, 255, 255, 0.787);
+    }
+
+    iframe {
+        background-color: rgba(0, 0, 0, 0.55);
+    }
+}
+.input-field {
+transition: all 0.3s ease; /* すべての変化に対してスムーズな遷移を追加 */
+}
+
+
+.input-field.dragging {
+border: 2px dashed #007bff; /* ドラッグ中のスタイル */
+}
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-20px); }
+    50% { transform: translateX(20px); }
+    75% { transform: translateX(-20px); }
+}
+
+
+
+.blur-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    display: none;
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+}
+
+.copy-options {
+background-color: rgba(255, 255, 255, 0.5); /* 不透明度50%の白 */
+padding: 20px;
+border-radius: 8px;
+box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+text-align: center;
+display: none;
+opacity: 0; /* 初期の不透明度 */
+transition: all 0.5s ease;
+}
+
+
+.copy-btn {
+margin: 10px;
+padding: 15px; /* ボタンのサイズを調整 */
+border-radius: 5px; /* 既存のスタイル */
+background-color: #007BFF; /* 背景色 */
+color: black; /* テキスト色を黒に */
+border: 2px solid transparent; /* 枠線を透明に */
+cursor: pointer;
+transition: transform 0.2s, border-color 0.2s; /* サイズと枠のアニメーション */
+font-size: 15px; /* ボタンサイズを大きくする */
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* 影を追加 */
+}
+
+
+
+.close-options-btn,
+.reset-btn {
+padding: 15px; /* ボタンの大きさを均一に */
+border-radius: 5px; /* 角を丸くする */
+background-color: red; /* 背景色を赤に */
+color: white; /* 文字色を白に */
+font-weight: bold; /* 太文字 */
+border: none; /* 枠線を消す */
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* 影を残す */
+transition: transform 0.3s ease; /* アニメーション */
+}
+
+.close-options-btn {
+padding: 15px; /* ボタンのサイズを統一 */
+border-radius: 5px; /* 角を丸くする */
+background-color: rgba(255, 0, 60, 0.86); /* 背景色を赤に */
+color: white; /* 文字色を白に */
+border: 2px solid red; /* 枠線を赤に */
+cursor: pointer;
+transition: transform 0.2s; /* アニメーション */
+font-size: 18px; /* サイズを合わせる */
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* 影を追加 */
+}
+.close-options-btn:hover {
+
+text-shadow: 2px 3px 8px rgba(0, 0, 0, 0.214);
+transform: scale(1.11);
+}
+
+
+.close-options-btn:hover {
+transform: scale(1.1); /* サイズ変更アニメーション */
+}
+
+
+.copy-btn:hover {
+transform: scale(1.05); /* サイズ変更アニメーション */
+border-color: rgba(255, 255, 255, 0.2); /* ホバー時に枠線を追加 */
+text-shadow: 2px 3px 8px rgba(0, 0, 0, 0.338);
+}
+.close-options-btn
+  textarea {
+    width: 100%;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    font-family: inherit;
+    overflow: hidden;
+    max-height: 200px;
+    transition: max-height 0.5s ease, padding 0.5s ease, transform 0.3s ease;
+    resize: none;
+}
+@keyframes fadeInExpand {
+0% {
+opacity: 0;
+transform: scale(0.8);
+}
+100% {
+opacity: 1;
+transform: scale(1);
+}
+}
+
+@keyframes fadeOut {
+0% {
+opacity: 1;
+transform: scale(1);
+}
+100% {
+opacity: 0;
+transform: scale(0.8);
+}
+}
+.element {
+    animation: fadeOut 1s ease-out forwards;
+}
+
+
+.copy-options {
+background-color: rgba(255, 255, 255, 0.5); /* 不透明度50%の白 */
+padding: 20px;
+border-radius: 8px;
+box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+text-align: center;
+display: none;
+opacity: 0; /* 初期の不透明度 */
+transition: all 0.5s ease;
+}
+
+.copy-options.animate {
+display: block; /* 表示時にブロックにする */
+animation: fadeInExpand 0.5s ease forwards; /* フェードイン */
+}
+
+.copy-options.fade-out {
+animation: fadeOut 0.5s ease forwards; /* フェードアウト */
+}
+
+
+.preview-overlay,
+.copy-options {
+animation: fadeInExpand 0.5s ease forwards;
+}
+.loading-overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100vw;
+height: 100vh;
+background-color: rgba(0, 0, 0, 0.770);
+background-color: rgba(0, 0, 0, 0.770);
+backdrop-filter: blur(10px);
+z-index: 999;
+display: none; /* 初めは非表示 */
+justify-content: center;
+align-items: center;
+transform: translateY(-100%); /* 初期位置を画面の上に */
+opacity: 0; /* 初期の不透明度 */
+transition: transform 0.7s ease, opacity 0.7s ease; /* スライドと不透明度のアニメーション */
+}
+
+.loading-message {
+color: white;
+font-weight: bold;
+opacity: 0; /* 初期の不透明度 */
+transition: opacity 0.5s ease; /* メッセージのフェードイン */
+}
+
+#htmlTagsMenu {
+    position: fixed; /* 画面に固定 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.445); /* 半透明の背景 */
+    z-index: 9999; /* 他の要素より前面に表示 */
+    display: none; /* 最初は非表示 */
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+#htmlTagsMenu .html-tags-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+
+/* #htmlTagsMenu ulのスタイル */
+#htmlTagsMenu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden; /* 横スクロールは表示しない */
+    overflow-y: hidden; /* 縦スクロールバーは非表示 */
+    width: 100%; /* 横幅を親要素に合わせる */
+    display: grid; /* グリッドレイアウト */
+    grid-template-columns: repeat(2, 1fr); /* 2列のグリッド */
+    justify-items: center; /* 各アイテム（li）を中央揃え */
+    gap: 10px; /* アイテム間の間隔 */
+}
+
+/* #htmlTagsMenu ul liのスタイル */
+#htmlTagsMenu ul li {
+    margin: 5px 0;
+    display: flex; /* ボタンを横長にするためにフレックスボックスに変更 */
+    justify-content: center; /* ボタンを横方向で中央揃え */
+}
+
+/* button要素のスタイル */
+#htmlTagsMenu ul li button {
+    width: 200px; /* ボタンの横幅を調整（必要に応じて変更） */
+    padding: 12px; /* ボタンに12pxの余白 */
+    text-align: center; /* ボタン内のテキストを中央揃え */
+    box-sizing: border-box; /* paddingを含めて幅計算 */
+    margin: 0; /* ボタンの周りの余白をリセット */
+}
+
+/* .html-tags-menuのスタイル */
+.html-tags-menu {
+    background-color: rgb(255, 255, 255);
+    padding: 5px;
+    border-radius: 5px;
+    display: none;
+    z-index: 1000;
+    max-width: 300px;
+    margin: 0 auto;
+    overflow-y: auto;
+    max-height: 80vh;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.3s ease-in-out, transform 0.5s ease-in-out;
+}
+
+/* .html-tags-contentのスタイル */
+.html-tags-content {
+    padding: 20px; /* 520pxは誤植かと思われます。余白を20pxに変更 */
+    color: inherit;
+    margin-top: -20px;
+}
+
+/* ボタンのホバー時のスタイル */
+button:hover {
+    transform: scale(0.95);
+}
+
+/* ボタンのアクティブ時のスタイル */
+button:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* normal-buttonのスタイル */
+.normal-button {
+    background-color: black;
+    color: white;
+}
+
+/* ulタグのグリッドレイアウト */
+ul {
+    list-style: none;
+    padding: 0;
+    display: grid; /* グリッドレイアウト */
+    grid-template-columns: repeat(2, 1fr); /* 2列のグリッド */
+    gap: 10px;
+    margin-top: -10px;
+    justify-items: center; /* セル内のアイテムを中央揃え */
+}
+
+/* liタグのスタイル */
+li {
+    padding: 5px;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* liタグが表示されたとき */
+li.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+.copy-notification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 8px;
+    background-color: rgb(236, 236, 236);
+    border: 0.1px solid rgb(200, 200, 200);
+    border-radius: 8px;
+    color: black;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    font-size: 10px; /* フォントサイズ */
+    z-index: 9999; /* 最前面に表示 */
+    
+    /* 文字を中央揃え */
+    display: flex;
+    justify-content: center;  /* 横方向の中央揃え */
+    align-items: center;      /* 縦方向の中央揃え */
+}
+
+
+.undo-button {
+    margin-top: 10px;
+    background-color: #f44336;
+    color: white;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    padding: 15px;
+    width: 100%; /* 必要に応じて幅を調整 */
+    
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.undo-button:hover {
+    transform: scale(1.03);
+}
+
+.undo-button:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+
+.resizable {
+    width: calc(100% - 24px);
+    height: 200px;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    font-family: inherit;
+    overflow: auto;
+    resize: vertical;
+    border: none;
+    margin: 12px;
+    transition: height 0.5s ease, padding 0.5s ease, opacity 0.5s ease;
+    background-color: rgba(255, 255, 255, 0.57);
+    color: rgba(0, 0, 0, 0.883);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.resizable:hover {
+    transform: scale(1.02);
+}
+.other-button-active {
+    opacity: 0.65;
+    background-color: rgba(0, 0, 0, 0.374);
+    border-radius: 5px;
+    transition: opacity 0.3s ease-in-out, transform 0.5s ease-in-out;
+}
+
+
+/* フェードアウト時に適用されるクラス */
+.blur-overlay.fade-out {
+    animation: fadeOut 0.5s forwards; /* フェードアウトアニメーション */
+}
+
+.copy-options {
+    /* copyOptionsのスタイルをここに */
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* copyOptionsのフェードアウト */
+.copy-options.fade-out {
+    animation: fadeOut 0.5s forwards; /* 同じくフェードアウトアニメーション */
+}
+
+

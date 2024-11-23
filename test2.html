@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プレビュー</title>
+
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+            font-family: 'San Francisco', sans-serif;
+            background-image: url('background.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        #startScreen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.316);
+            max-width: 800px;
+            width: 100%;
+            text-align: left;
+            background-color: rgba(255, 255, 255, 0.342);
+        }
+
+        .toggle {
+            width: 100%;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 10px;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            background-color: rgba(255, 255, 255, 0.814);
+            font-weight: bold;
+            font-size: 18px;
+            color: black;
+            transition: all 0.3s ease, transform 0.3s ease;
+        }
+
+        .toggle:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            transform: scale(1.05);
+        }
+
+        .resizable {
+            width: calc(100% - 24px);
+            height: 200px;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            font-family: inherit;
+            overflow: auto;
+            resize: vertical;
+            border: none;
+            margin: 12px;
+            transition: height 0.5s ease, padding 0.5s ease, opacity 0.5s ease;
+            background-color: rgba(255, 255, 255, 0.57);
+            color: rgba(0, 0, 0, 0.883);
+        }
+
+        .resizable.closed {
+            height: 0;
+            padding: 0;
+            opacity: 0;
+        }
+
+        iframe {
+            width: calc(100% - 36px);
+            height: 300px;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            border: none;
+            position: relative;
+            z-index: 1;
+            background-color: rgba(255, 255, 255, 0.55);
+            padding: 12px;
+            transition: all 0.5s ease;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 18px;
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+        }
+
+        .expand-btn, .reset-btn, .copy-download-btn, #reloadBtn {
+    padding: 15px 25px;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    font-size: 17px;
+    margin: 0 12px;
+    background-color: rgba(255, 255, 255, 0.541);
+    color: black;
+    border: none; /* ボタンの枠線を消す */
+}
+
+.expand-btn:hover,
+.reset-btn:hover,
+.copy-download-btn:hover,
+#reloadBtn:hover {
+    text-shadow: 2px 3px 8px rgba(0, 0, 0, 0.303);
+    transform: scale(1.11);
+}
+
+        .preview-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(255, 255, 255, 0.366);
+            z-index: 9;
+            display: none;
+            backdrop-filter: blur(10px);
+        }
+
+        .preview-expanded {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 88vw;
+            height: 88vh;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            transition: all 0.5s ease;
+            background-color: rgba(255, 255, 255, 0.55);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: rgb(255, 255, 255);
+            color: black;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            z-index: 11;
+            border: none; /* ボタンの枠線を消す */
+        }
+
+        .close-btn:hover {
+            background-color: rgba(240, 240, 240, 1);
+            transform: scale(1.1);
+        }
+
+        pre {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 0;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .syntax-html {
+            color: blue;
+        }
+
+        .syntax-css {
+            color: green;
+        }
+
+        .syntax-js {
+            color: brown;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: black;
+            }
+
+     
+
+            #startScreen {
+                background: rgba(0, 0, 0, 0.55);
+                color: white;
+            }
+
+            .toggle {
+                background-color: rgb(0, 0, 0);
+                color: white;
+            }
+
+            .resizable {
+                background-color: rgba(50, 50, 50, 0.647);
+                color: rgba(255, 255, 255, 0.738);
+            }
+
+            .expand-btn {
+                background-color: rgb(0, 0, 0);
+                color: white;
+            }
+
+            .close-btn {
+                background-color: black;
+                color: rgba(255, 255, 255, 0.787);
+            }
+
+            iframe {
+                background-color: rgba(0, 0, 0, 0.55);
+            }
+        }
+        .input-field {
+    transition: all 0.3s ease; /* すべての変化に対してスムーズな遷移を追加 */
+}
+
+
+.input-field.dragging {
+    border: 2px dashed #007bff; /* ドラッグ中のスタイル */
+}
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-20px); }
+            50% { transform: translateX(20px); }
+            75% { transform: translateX(-20px); }
+        }
+
+      
+
+        .blur-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: none;
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .copy-options {
+        background-color: rgba(255, 255, 255, 0.5); /* 不透明度50%の白 */
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        text-align: center;
+        display: none;
+        opacity: 0; /* 初期の不透明度 */
+        transition: all 0.5s ease;
+    }
+
+
+    .copy-btn {
+        margin: 10px;
+        padding: 15px; /* ボタンのサイズを調整 */
+        border-radius: 5px; /* 既存のスタイル */
+        background-color: #007BFF; /* 背景色 */
+        color: black; /* テキスト色を黒に */
+        border: 2px solid transparent; /* 枠線を透明に */
+        cursor: pointer;
+        transition: transform 0.2s, border-color 0.2s; /* サイズと枠のアニメーション */
+        font-size: 15px; /* ボタンサイズを大きくする */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* 影を追加 */
+    }
+
+
+        
+        .close-options-btn,
+.reset-btn {
+    padding: 15px; /* ボタンの大きさを均一に */
+    border-radius: 5px; /* 角を丸くする */
+    background-color: red; /* 背景色を赤に */
+    color: white; /* 文字色を白に */
+    font-weight: bold; /* 太文字 */
+    border: none; /* 枠線を消す */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* 影を残す */
+    transition: transform 0.3s ease; /* アニメーション */
+}
+
+.close-options-btn {
+        padding: 15px; /* ボタンのサイズを統一 */
+        border-radius: 5px; /* 角を丸くする */
+        background-color: rgba(255, 0, 60, 0.86); /* 背景色を赤に */
+        color: white; /* 文字色を白に */
+        border: 2px solid red; /* 枠線を赤に */
+        cursor: pointer;
+        transition: transform 0.2s; /* アニメーション */
+        font-size: 18px; /* サイズを合わせる */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* 影を追加 */
+    }
+  .close-options-btn:hover {
+        
+        text-shadow: 2px 3px 8px rgba(0, 0, 0, 0.214);
+    transform: scale(1.11);
+    }
+
+
+    .close-options-btn:hover {
+        transform: scale(1.1); /* サイズ変更アニメーション */
+    }
+
+
+.copy-btn:hover {
+        transform: scale(1.05); /* サイズ変更アニメーション */
+        border-color: rgba(255, 255, 255, 0.2); /* ホバー時に枠線を追加 */
+        text-shadow: 2px 3px 8px rgba(0, 0, 0, 0.338);
+    }
+.close-options-btn
+          textarea {
+            width: 100%;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            font-family: inherit;
+            overflow: hidden;
+            max-height: 200px;
+            transition: max-height 0.5s ease, padding 0.5s ease, transform 0.3s ease;
+            resize: none;
+        }
+        @keyframes fadeInExpand {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+}
+
+.copy-options {
+    background-color: rgba(255, 255, 255, 0.5); /* 不透明度50%の白 */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    display: none;
+    opacity: 0; /* 初期の不透明度 */
+    transition: all 0.5s ease;
+}
+
+.copy-options.animate {
+        display: block; /* 表示時にブロックにする */
+        animation: fadeInExpand 0.5s ease forwards; /* フェードイン */
+    }
+
+    .copy-options.fade-out {
+        animation: fadeOut 0.5s ease forwards; /* フェードアウト */
+    }
+
+
+.preview-overlay,
+.copy-options {
+    animation: fadeInExpand 0.5s ease forwards;
+}
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.770);
+    background-color: rgba(0, 0, 0, 0.770);
+    backdrop-filter: blur(10px);
+    z-index: 999;
+    display: none; /* 初めは非表示 */
+    justify-content: center;
+    align-items: center;
+    transform: translateY(-100%); /* 初期位置を画面の上に */
+    opacity: 0; /* 初期の不透明度 */
+    transition: transform 0.7s ease, opacity 0.7s ease; /* スライドと不透明度のアニメーション */
+}
+
+.loading-message {
+    color: white;
+    font-size: 2em;
+    font-weight: bold;
+    opacity: 0; /* 初期の不透明度 */
+    transition: opacity 0.5s ease; /* メッセージのフェードイン */
+}
+
+
+
+    </style>
+</head>
+<body>
+    <audio id="pasteSound" src="paste.mp3" preload="auto"></audio>
+
+    <div id="startScreen">
+        <textarea id="htmlInput" class="resizable" placeholder="HTMLコードを入力..."></textarea>
+        <button id="htmlToggle" class="toggle">HTML入力を書き換え</button>
+        <textarea id="cssInput" class="resizable closed" placeholder="CSSコードを入力..."></textarea>
+        <button id="cssToggle" class="toggle">CSS入力を書き換え</button>
+        <textarea id="jsInput" class="resizable closed" placeholder="JavaScriptコードを入力..."></textarea>
+        <button id="jsToggle" class="toggle">JavaScript入力を書き換え</button>
+       <div class="button-container">
+    <button id="resetBtn" class="reset-btn"> × 削除</button>
+    <button id="expandBtn" class="expand-btn">拡大</button>
+    <button id="reloadBtn" class="expand-btn">再読み込み</button> <!-- 追加 -->
+    <button id="copyDownloadBtn" class="copy-download-btn">コピー・ダウンロード</button>
+    <button id="tagBtn" class="copy-download-btn">タグを追加 ＋</button>
+</div>
+
+        
+        <iframe id="preview"></iframe>
+        <div id="preview-overlay" class="preview-overlay"></div>
+    </div>
+
+    <div class="blur-overlay" id="blurOverlay">
+        <div class="copy-options" id="copyOptions">
+            <h3>コピーするコードを選択</h3>
+            <button class="copy-btn" id="copyHtml" style="background-color: white;">HTMLをコピー</button>
+            <button class="copy-btn" id="copyCss" style="background-color: white;">CSSをコピー</button>
+            <button class="copy-btn" id="copyJs" style="background-color: rgb(255, 255, 255);">JavaScriptをコピー</button>
+            
+            <button class="close-options-btn" id="closeOptions"　style="background-color: rgba(255, 0, 60, 0.86);">閉じる</button>
+        </div>
+    </div>
+
+    <script>
+        const htmlInput = document.getElementById('htmlInput');
+        const cssInput = document.getElementById('cssInput');
+        const jsInput = document.getElementById('jsInput');
+        const preview = document.getElementById('preview');
+        const overlay = document.getElementById('preview-overlay');
+        const copyDownloadBtn = document.getElementById('copyDownloadBtn');
+        const blurOverlay = document.getElementById('blurOverlay');
+        const copyOptions = document.getElementById('copyOptions');
+        
+        function updatePreview() {
+            const html = htmlInput.value;
+            const css = cssInput.value;
+            const js = jsInput.value;
+
+            const doc = preview.contentDocument || preview.contentWindow.document;
+            doc.open();
+            doc.write(`
+                <html>
+            
+                <head>
+                    <style>${css}</style>
+                </head>
+                <body>
+                
+                    ${html}
+                    <script>${js}<\/script>
+                </body>
+                </html>
+            `);
+            doc.close();
+        }
+
+        function toggleInput(input) {
+            input.classList.toggle('closed');
+            if (input.classList.contains('closed')) {
+                input.style.height = '0';
+                input.style.padding = '0';
+                input.style.opacity = '0';
+            } else {
+                input.style.height = '200px';
+                input.style.padding = '10px';
+                input.style.opacity = '1';
+            }
+            updatePreview();
+        }
+
+        document.getElementById('reloadBtn').addEventListener('click', () => {
+    updatePreview(); // プレビューを再読み込みする関数を呼び出し
+});
+
+
+        function handleFileDrop(event, input, validTypes) {
+            event.preventDefault();
+            const files = event.dataTransfer.files;
+            const validFiles = Array.from(files).filter(file => validTypes.includes(file.type));
+
+            if (validFiles.length > 0) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    input.value = e.target.result;
+                    updatePreview();
+
+                    // ここで音を再生
+            const pasteSound = document.getElementById('pasteSound');
+            pasteSound.play();  // 音を再生
+                };
+                reader.readAsText(validFiles[0]);
+            } else {
+                shakeInput(input);
+            }
+        }
+
+        function shakeInput(input) {
+            input.style.animation = 'shake 0.5s';
+            setTimeout(() => {
+                input.style.animation = ''; 
+            }, 500);
+        }
+
+        function handleDragOver(event, input) {
+            event.preventDefault();
+            const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            input.style.backgroundColor = isDarkMode ? 'rgba(255, 255, 255, 0.42)' : 'rgba(0, 0, 0, 0.7)';
+            input.style.transform = 'scale(1.05)';
+            input.style.transition = 'transform 0.5s ease';
+        }
+
+        function handleDragLeave(event, input) {
+            input.style.backgroundColor = '';
+            input.style.transform = 'scale(1)';
+        }
+
+        htmlInput.addEventListener('dragover', (event) => handleDragOver(event, htmlInput));
+        htmlInput.addEventListener('dragleave', (event) => handleDragLeave(event, htmlInput));
+        htmlInput.addEventListener('drop', (event) => {
+            handleFileDrop(event, htmlInput, ['text/html']);
+            handleDragLeave(event, htmlInput);
+        });
+
+        cssInput.addEventListener('dragover', (event) => handleDragOver(event, cssInput));
+        cssInput.addEventListener('dragleave', (event) => handleDragLeave(event, cssInput));
+        cssInput.addEventListener('drop', (event) => {
+            handleFileDrop(event, cssInput, ['text/css']);
+            handleDragLeave(event, cssInput);
+        });
+
+        jsInput.addEventListener('dragover', (event) => handleDragOver(event, jsInput));
+        jsInput.addEventListener('dragleave', (event) => handleDragLeave(event, jsInput));
+        jsInput.addEventListener('drop', (event) => {
+            handleFileDrop(event, jsInput, ['application/javascript', 'text/javascript', 'text/plain']);
+            handleDragLeave(event, jsInput);
+        });
+
+        document.getElementById('htmlToggle').addEventListener('click', () => {
+            toggleInput(htmlInput);
+        });
+        document.getElementById('cssToggle').addEventListener('click', () => {
+            toggleInput(cssInput);
+        });
+        document.getElementById('jsToggle').addEventListener('click', () => {
+            toggleInput(jsInput);
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            if (confirm("全て削除しますか？ (はい、いいえ)")) {
+                htmlInput.value = '';
+                cssInput.value = '';
+                jsInput.value = '';
+                updatePreview();
+
+                [htmlInput, cssInput, jsInput].forEach(input => {
+                    input.style.height = '200px';
+                    input.style.padding = '10px';
+                    input.style.opacity = '1';
+                    input.classList.remove('closed');
+                });
+            }
+        });
+
+        document.getElementById('expandBtn').addEventListener('click', () => {
+            const isExpanded = preview.classList.toggle('preview-expanded');
+            overlay.style.display = isExpanded ? 'block' : 'none';
+            if (isExpanded) {
+                updatePreview();
+            } else {
+                overlay.style.display = 'none';
+            }
+        });
+
+        overlay.addEventListener('click', () => {
+            const isExpanded = preview.classList.contains('preview-expanded');
+            if (isExpanded) {
+                preview.classList.remove('preview-expanded');
+                overlay.style.display = 'none';
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+        if (copyOptions.style.display === 'block') {
+            closeCopyOptions(); // 閉じる処理を呼び出す
+        } else if (preview.classList.contains('preview-expanded')) {
+            preview.classList.remove('preview-expanded');
+            overlay.style.display = 'none';
+        }
+    }
+});
+
+copyDownloadBtn.addEventListener('click', () => {
+    blurOverlay.style.display = 'flex';
+    copyOptions.style.display = 'block';
+    copyOptions.classList.add('animate'); // アニメーションを適用するためのクラス
+    copyOptions.style.opacity = '1'; // 不透明度を1に
+});
+
+
+
+        document.body.addEventListener('dblclick', (e) => {
+            if (!e.target.closest('button, textarea, .toggle')) {
+                preview.classList.toggle('preview-expanded');
+                overlay.style.display = preview.classList.contains('preview-expanded') ? 'block' : 'none';
+            }
+        });
+
+    
+
+
+
+
+
+
+        document.getElementById('copyHtml').addEventListener('click', () => {
+            navigator.clipboard.writeText(htmlInput.value).then(() => {
+                // ここで音を再生
+            const pasteSound = document.getElementById('pasteSound');
+            pasteSound.play();  // 音を再生
+                alert("HTMLがコピーされました");
+            });
+        });
+
+        document.getElementById('copyCss').addEventListener('click', () => {
+            navigator.clipboard.writeText(cssInput.value).then(() => {
+                // ここで音を再生
+            const pasteSound = document.getElementById('pasteSound');
+            pasteSound.play();  // 音を再生
+                alert("CSSがコピーされました");
+
+            });
+        });
+
+        document.getElementById('copyJs').addEventListener('click', () => {
+            navigator.clipboard.writeText(jsInput.value).then(() => {
+                // ここで音を再生
+            const pasteSound = document.getElementById('pasteSound');
+            pasteSound.play();  // 音を再生
+                alert("JavaScriptがコピーされました");
+            });
+        });
+
+        function closeCopyOptions() {
+    copyOptions.classList.add('fade-out'); // フェードアウトアニメーションを追加
+    setTimeout(() => {
+        blurOverlay.style.display = 'none'; // 背景を通常に戻す
+        copyOptions.style.display = 'none'; // 完全に非表示に
+        copyOptions.classList.remove('fade-out'); // フェードアウトクラスを削除
+    }, 500); // アニメーションの時間と同じに
+}
+
+// この部分を削除して以下を追加
+document.getElementById('closeOptions').addEventListener('click', closeCopyOptions);
+
+
+
+        // リアルタイムプレビューの初期化
+        document.addEventListener('DOMContentLoaded', () => {
+            updatePreview();
+            // 各入力フィールドの変更を監視
+            [htmlInput, cssInput, jsInput].forEach(input => {
+                input.addEventListener('input', updatePreview);
+            });
+        });
+
+    
+        const reloadBtn = document.getElementById('reloadBtn');
+const loadingOverlay = document.createElement('div');
+loadingOverlay.className = 'loading-overlay';
+const loadingMessage = document.createElement('div');
+loadingMessage.className = 'loading-message';
+loadingMessage.innerText = '再読み込み中...';
+loadingOverlay.appendChild(loadingMessage);
+document.body.appendChild(loadingOverlay);
+
+let isLoading = false; // ローディング中のフラグ
+
+reloadBtn.addEventListener('click', () => {
+    if (isLoading) return; // すでにローディング中の場合は何もしない
+    isLoading = true; // ローディング開始
+
+    // 背景を表示
+    loadingOverlay.style.display = 'flex';
+
+    // アニメーション開始
+    setTimeout(() => {
+        loadingOverlay.style.transform = 'translateY(0)'; // 下にスライドイン
+        loadingOverlay.style.opacity = '1'; // フェードイン
+    }, 0); // スタイルを設定後に実行
+
+    // 0.5秒後にメッセージを表示（フェードイン）
+    setTimeout(() => {
+        loadingMessage.style.opacity = '1'; // メッセージをフェードイン
+    }, 650); // カーテンの降下開始から0.5秒後に表示
+
+  
+    // 1.1秒後にフェードアウト開始
+    setTimeout(() => {
+        loadingOverlay.style.opacity = '0'; // オーバーレイをフェードアウト
+        loadingMessage.style.opacity = '0'; // メッセージもフェードアウト
+        
+        // スライド完了後に非表示にする
+        setTimeout(() => {
+            loadingOverlay.style.display = 'none'; // 完全に非表示に
+            isLoading = false; // ローディング完了
+            updatePreview(); // プレビューを更新
+        }, 250); // フェードアウトの時間
+    }, 1500); // メッセージが表示された後に1.1秒後にフェードアウトを開始
+});
+
+
+const inputField = document.querySelector('.input-field');
+
+inputField.addEventListener('dragover', (event) => {
+    event.preventDefault(); // デフォルトの動作を防ぐ
+    inputField.classList.add('dragging'); // アニメーションを追加
+});
+
+inputField.addEventListener('dragleave', () => {
+    inputField.classList.remove('dragging'); // アニメーションを削除
+});
+
+inputField.addEventListener('drop', (event) => {
+    event.preventDefault(); // デフォルトの動作を防ぐ
+    inputField.classList.remove('dragging'); // アニメーションを削除
+    // ファイル処理のロジック
+});
+
+    </script>
+</body>
+</html>
