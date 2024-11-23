@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プレビュー</title>
+    <link rel="stylesheet" href="styles.css"> <!-- 外部CSSファイルを読み込む -->
+  
+</head>
+<body>
+    <audio id="pasteSound" src="paste.mp3" preload="auto"></audio>
+
+    <div id="startScreen">
+        <textarea id="htmlInput" class="resizable" placeholder="HTMLコードを入力...(Return/Enterを押して反映)"></textarea>
+        <button id="htmlToggle" class="toggle">HTML入力を書き換え</button>
+        <textarea id="cssInput" class="resizable closed" placeholder="CSSコードを入力..."></textarea>
+        <button id="cssToggle" class="toggle">CSS入力を書き換え</button>
+        <textarea id="jsInput" class="resizable closed" placeholder="JavaScriptコードを入力..."></textarea>
+        <button id="jsToggle" class="toggle">JavaScript入力を書き換え</button>
+       <div class="button-container">
+    <button id="resetBtn" class="reset-btn"> × 削除</button>
+    <button id="expandBtn" class="expand-btn">拡大</button>
+    <button id="reloadBtn" class="expand-btn">再読み込み</button> <!-- 追加 -->
+    <button id="copyDownloadBtn" class="copy-download-btn">コピー・ダウンロード</button>
+    <button class="normal-button" id="htmlTagsBtn">HTMLタグ一覧</button> <div class="overlay" id="htmlTagsMenu">
+        <div class="html-tags-content">
+            <h2>　タグを追加</h2>
+            <ul id="tagList">
+
+<!-- 既存のHTMLタグ一覧 -->
+    <li onclick="insertTag('')"><button>&lt;h1&gt; - タイトル</button></li>
+
+                <li onclick="insertTag('')"><button>&lt;h2&gt; - サブタイトル</button></li>
+                <li onclick="insertTag('')"><button>&lt;h3&gt; - 見出し</button></li>
+                <li onclick="insertTag('')"><button>&lt;h4&gt; - 小さい見出し（文字）</button></li>
+                <li onclick="insertTag()"><button>&lt;p&gt; - 文字</button></li>
+                <li onclick="insertTag('')"><button>&lt;b&gt; - 太文字</button></li>
+                <li onclick="insertTag('')"><button>&lt;u&gt; - 下線</button></li>
+                <li onclick="insertTag('')"><button>&lt;span&gt; - 文字色変更</button></li>
+                <li onclick="insertTag('')"><button>&lt;a&gt; - ハイパーリンク</button></li>
+                <li id="otherButton" onclick="toggleOtherTags()"><button id="otherButtonText">その他</button></li>
+            </ul>
+            <button class="undo-button" onclick="closeTagMenu()">htmlを入力に戻る</button>
+        </div>
+    </div>
+
+    <div class="copy-notification" id="copyNotification"></div>
+    <script>
+        let htmlTagsMenu = document.getElementById('htmlTagsMenu');
+        let htmlTagsBtn = document.getElementById('htmlTagsBtn');
+        let tagList = document.getElementById('tagList');
+        let copyNotification = document.getElementById('copyNotification');
+        let otherButton = document.getElementById('otherButton');
+        let otherButtonText = document.getElementById('otherButtonText');
+        let isOtherTagsActive = false;  // 「その他」タグがアクティブかどうか
+    
+        // コピー済みタグを追跡するための Set
+        let copiedTags = new Set();
+    
+        // タグメニュー表示
+        htmlTagsBtn.addEventListener('click', function() {
+            // メニュー表示
+            htmlTagsMenu.style.display = 'flex';
+            setTimeout(() => {
+                htmlTagsMenu.style.opacity = '1';
+                htmlTagsMenu.style.transform = 'scale(1)';
+                let items = tagList.getElementsByTagName('li');
+                Array.from(items).forEach((item, index) => {
+                    setTimeout(() => {
+                        item.classList.add('show');
+                    }, index * 50); // 0.05秒間隔で表示
+                });
+            }, 50);
+    
+            // 「その他」タグがアクティブなら切り替え
+            if (isOtherTagsActive) {
+                toggleOtherTags();
+            }
+        });
+    
+        // 外部クリックでメニューを閉じる
+        window.addEventListener('click', function(e) {
+            if (!htmlTagsMenu.contains(e.target) && e.target !== htmlTagsBtn) {
+                closeTagMenu();
+            }
+        });
+    
+        // Escapeキーでメニューを閉じる
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeTagMenu();
+            }
+        });
+    
+        // タグ挿入関数
+        function insertTag(tag) {
+            let htmlInput = document.getElementById('htmlInput').value;
+    
+            // すでに同じタグが存在するかチェック
+            const regex = new RegExp(tag.replace(/[.*+?^=!:${}()|\[\]\/\\]/g, '\\$&'), 'g');
+            if (htmlInput.match(regex)) {
+                
+            }
+    
+            // 新しいタグを追加
+            document.getElementById('htmlInput').value += tag;
+            showCopyNotification(tag);
+        }
+
+    
+        // メニューを閉じる
+        function closeTagMenu() {
+            let items = tagList.getElementsByTagName('li');
+            Array.from(items).forEach(item => item.classList.remove('show'));
+            htmlTagsMenu.style.opacity = '0';
+            htmlTagsMenu.style.transform = 'scale(0.8)';
+            setTimeout(() => {
+                htmlTagsMenu.style.display = 'none';
+                // 「その他」状態で閉じた場合は切り替えをリセット
+                if (isOtherTagsActive) {
+                    toggleOtherTags();
+                }
+            }, 300);
+        }
+    
+        // その他タグの切り替え
+        function toggleOtherTags() {
+            if (isOtherTagsActive) {
+                // その他タグを戻す
+                document.querySelectorAll('li').forEach((li, index) => {
+                    if (index === 0) li.innerHTML = '<button>&lt;h1&gt; - タイトル</button>';
+                    if (index === 1) li.innerHTML = '<button>&lt;h2&gt; - サブタイトル</button>';
+                    if (index === 2) li.innerHTML = '<button>&lt;h3&gt; - 見出し</button>';
+                    if (index === 3) li.innerHTML = '<button>&lt;h4&gt; - 小さい見出し（文字）</button>';
+                    if (index === 4) li.innerHTML = '<button>&lt;p&gt; - 文字</button>';
+                    if (index === 5) li.innerHTML = '<button>&lt;b&gt; - 太文字</button>';
+                    if (index === 6) li.innerHTML = '<button>&lt;u&gt; - 下線</button>';
+                    if (index === 7) li.innerHTML = '<button>&lt;span&gt; - 文字色変更</button>';
+                    if (index === 8) li.innerHTML = '<button>&lt;a&gt; - ハイパーリンク</button>';
+                });
+                otherButtonText.innerHTML = 'その他';
+                otherButton.classList.remove('other-button-active');
+            } else {
+                // その他タグに切り替え
+                document.querySelectorAll('li').forEach((li, index) => {
+                    if (index === 0) li.innerHTML = '<button>&lt;meter&gt; - 評価スコア</button>';
+                    if (index === 1) li.innerHTML = '<button>&lt;del&gt; - 取り消し線</button>';
+                    if (index === 2) li.innerHTML = '<button>&lt;mark&gt; - 強調表示</button>';
+                    if (index === 3) li.innerHTML = '<button>&lt;h5&gt; - 小さい文字</button>';
+                    if (index === 4) li.innerHTML = '<button>&lt;span&gt; - 文字サイズ指定</button>';
+                    if (index === 5) li.innerHTML = '<button>&lt;marquee&gt; - 右から左に動く</button>';
+                    if (index === 6) li.innerHTML = '<button>&lt;hr&gt; - 区切り線</button>';
+                    if (index === 7) li.innerHTML = '<button>&lt;h6&gt; - かなり小さい文字</button>';
+                    if (index === 8) li.innerHTML = '<button>&lt;br&gt; - 改行</button>';
+                });
+                otherButtonText.innerHTML = '戻す';
+                otherButton.classList.add('other-button-active');
+            }
+            isOtherTagsActive = !isOtherTagsActive;
+        }
+    
+        // 各タグボタンのクリックイベント
+        document.querySelectorAll('li').forEach((li) => {
+            li.addEventListener('click', () => {
+                let tag = li.textContent.trim();
+    
+                // 「その他」状態の場合、選ばれたタグだけをコピー
+                if (isOtherTagsActive) {
+                    switch (tag) {
+                        case '<meter> - 評価スコア':
+                            insertTag('<meter value="80" min="0" max="100"></meter>'); break;
+                        case '<del> - 取り消し線':
+                            insertTag('<del>取り消し線のあるテキスト</del>'); break;
+                        case '<mark> - 強調表示':
+                            insertTag('<mark>強調表示</mark>'); break;
+                        case '<h5> - 小さい文字':
+                            insertTag('<h5>小さい文字</h5>'); break;
+                        case '<span> - 文字サイズ指定':
+                            insertTag('<p><span style="font-size: 24px;">文字サイズを24pxに変更した文字</span></p>'); break;
+                        case '<marquee> - 右から左に動く':
+                            insertTag('<marquee>みぎからひだりに</marquee>'); break;
+                        case '<hr> - 区切り線':
+                            insertTag('<hr> <!-- 水平線 -->'); break;
+                        case '<h6> - かなり小さい文字':
+                            insertTag('<h6>かなり小さい文字</h6>'); break;
+                        case '<br> - 改行':
+                            insertTag('<br>'); break;
+                        default:
+                            break;
+                    }
+                    // コピー済みタグに追加
+                    copiedTags.add(tag);
+                } else {
+                    // 通常のタグ群のコピー
+                    switch (tag) {
+                        case '<h1> - タイトル':
+                            insertTag('<h1>タイトル</h1>'); break;
+                        case '<h2> - サブタイトル':
+                            insertTag('<h2>サブタイトル</h2>'); break;
+                        case '<h3> - 見出し':
+                            insertTag('<h3>見出し</h3>'); break;
+                        case '<h4> - 小さい見出し（文字）':
+                            insertTag('<h4>小さい見出し</h4>'); break;
+                        case '<p> - 文字':
+                            insertTag('<p>文字を入力...</p>'); break;
+                        case '<b> - 太文字':
+                            insertTag('<b>太文字</b>'); break;
+                        case '<u> - 下線':
+                            insertTag('<u>下線</u>'); break;
+                        case '<span> - 文字色変更':
+                            insertTag('<span style="color: red;">赤文字</span>'); break;
+                        case '<a> - ハイパーリンク':
+                            insertTag('<a href="URL">ハイパーリンク</a>'); break;
+                        default:
+                            break;
+                    }
+                }
+            });
+        });
+
+        // コピー通知の要素
+const CopyNotification = document.createElement('div');
+copyNotification.classList.add('copy-notification');
+document.body.appendChild(copyNotification);
+
+// コピー通知の表示
+function showCopyNotification(tag) {
+    copyNotification.textContent = `コピー・${tag}`;
+    copyNotification.style.opacity = '1';
+    setTimeout(() => {
+        copyNotification.style.opacity = '0';
+    }, 700); // 0.7秒後にフェードアウト
+}
+
+// 取り消し通知の表示
+function showUndoNotification() {
+    copyNotification.textContent = '取り消し';
+    copyNotification.style.opacity = '1';
+    setTimeout(() => {
+        copyNotification.style.opacity = '0';
+    }, 700); // 0.7秒後にフェードアウト
+}
+
+// キーボードイベントリスナー
+document.addEventListener('keydown', function (e) {
+    // Ctrl+Z または Cmd+Z を検出
+    if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+        showUndoNotification(); // 取り消し通知を表示
+    }
+});
+
+// 例：コピー操作を模倣
+function copyText(tag) {
+    // 実際のコピー処理がここに来る
+    showCopyNotification(tag); // コピー通知を表示
+}
+
+// 実際のコピー操作を模倣するボタンなどのイベントを追加する場合は
+// 例えば、ボタンをクリックした時にコピー通知を表示させるなど。
+document.getElementById('copy-button').addEventListener('click', () => {
+    copyText('タグ名');
+});
+
+    </script>
+    
+</div>
+
+        
+        <iframe id="preview"></iframe>
+        <div id="preview-overlay" class="preview-overlay"></div>
+    </div>
+
+    <div class="blur-overlay" id="blurOverlay">
+        <div class="copy-options" id="copyOptions">
+            <h3>コピーするコードを選択</h3>
+            <button class="copy-btn" id="copyHtml" style="background-color: white;">HTMLをコピー</button>
+            <button class="copy-btn" id="copyCss" style="background-color: white;">CSSをコピー</button>
+            <button class="copy-btn" id="copyJs" style="background-color: rgb(255, 255, 255);">JavaScriptをコピー</button>
+            
+            <button class="close-options-btn" id="closeOptions"　style="background-color: rgba(255, 0, 60, 0.86);">閉じる</button>
+        </div>
+    </div>
+
+    <script>
+
+        const htmlInput = document.getElementById('htmlInput');
+        const cssInput = document.getElementById('cssInput');
+        const jsInput = document.getElementById('jsInput');
+        const preview = document.getElementById('preview');
+        const overlay = document.getElementById('preview-overlay');
+        const copyDownloadBtn = document.getElementById('copyDownloadBtn');
+        const blurOverlay = document.getElementById('blurOverlay');
+        const copyOptions = document.getElementById('copyOptions');
+        
+        function updatePreview() {
+            const html = htmlInput.value;
+            const css = cssInput.value;
+            const js = jsInput.value;
+
+            const doc = preview.contentDocument || preview.contentWindow.document;
+            doc.open();
+            doc.write(`
+                <html>
+            
+                <head>
+                    <style>${css}</style>
+                </head>
+                <body>
+                
+                    ${html}
+                    <script>${js}<\/script>
+                </body>
+                </html>
+            `);
+            doc.close();
+        }
+
+        function toggleInput(input) {
+            input.classList.toggle('closed');
+            if (input.classList.contains('closed')) {
+                input.style.height = '0';
+                input.style.padding = '0';
+                input.style.opacity = '0';
+            } else {
+                input.style.height = '200px';
+                input.style.padding = '10px';
+                input.style.opacity = '1';
+            }
+            updatePreview();
+        }
+
+        document.getElementById('reloadBtn').addEventListener('click', () => {
+    updatePreview(); // プレビューを再読み込みする関数を呼び出し
+});
+
+
+        function handleFileDrop(event, input, validTypes) {
+            event.preventDefault();
+            const files = event.dataTransfer.files;
+            const validFiles = Array.from(files).filter(file => validTypes.includes(file.type));
+
+            if (validFiles.length > 0) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    input.value = e.target.result;
+                    updatePreview();
+
+                    // ここで音を再生
+            const pasteSound = document.getElementById('pasteSound');
+            pasteSound.play();  // 音を再生
+                };
+                reader.readAsText(validFiles[0]);
+            } else {
+                shakeInput(input);
+            }
+        }
+
+        function shakeInput(input) {
+            input.style.animation = 'shake 0.5s';
+            setTimeout(() => {
+                input.style.animation = ''; 
+            }, 500);
+        }
+
+        function handleDragOver(event, input) {
+            event.preventDefault();
+            const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            input.style.backgroundColor = isDarkMode ? 'rgba(255, 255, 255, 0.42)' : 'rgba(0, 0, 0, 0.7)';
+            input.style.transform = 'scale(1.05)';
+            input.style.transition = 'transform 0.5s ease';
+        }
+
+        function handleDragLeave(event, input) {
+            input.style.backgroundColor = '';
+            input.style.transform = 'scale(1)';
+        }
+
+        htmlInput.addEventListener('dragover', (event) => handleDragOver(event, htmlInput));
+        htmlInput.addEventListener('dragleave', (event) => handleDragLeave(event, htmlInput));
+        htmlInput.addEventListener('drop', (event) => {
+            handleFileDrop(event, htmlInput, ['text/html']);
+            handleDragLeave(event, htmlInput);
+        });
+
+        cssInput.addEventListener('dragover', (event) => handleDragOver(event, cssInput));
+        cssInput.addEventListener('dragleave', (event) => handleDragLeave(event, cssInput));
+        cssInput.addEventListener('drop', (event) => {
+            handleFileDrop(event, cssInput, ['text/css']);
+            handleDragLeave(event, cssInput);
+        });
+
+        jsInput.addEventListener('dragover', (event) => handleDragOver(event, jsInput));
+        jsInput.addEventListener('dragleave', (event) => handleDragLeave(event, jsInput));
+        jsInput.addEventListener('drop', (event) => {
+            handleFileDrop(event, jsInput, ['application/javascript', 'text/javascript', 'text/plain']);
+            handleDragLeave(event, jsInput);
+        });
+
+        document.getElementById('htmlToggle').addEventListener('click', () => {
+            toggleInput(htmlInput);
+        });
+        document.getElementById('cssToggle').addEventListener('click', () => {
+            toggleInput(cssInput);
+        });
+        document.getElementById('jsToggle').addEventListener('click', () => {
+            toggleInput(jsInput);
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            if (confirm("全て削除しますか？ (はい、いいえ)")) {
+                htmlInput.value = '';
+                cssInput.value = '';
+                jsInput.value = '';
+                updatePreview();
+
+                [htmlInput, cssInput, jsInput].forEach(input => {
+                    input.style.height = '200px';
+                    input.style.padding = '10px';
+                    input.style.opacity = '1';
+                    input.classList.remove('closed');
+                });
+            }
+        });
+
+        document.getElementById('expandBtn').addEventListener('click', () => {
+            const isExpanded = preview.classList.toggle('preview-expanded');
+            overlay.style.display = isExpanded ? 'block' : 'none';
+            if (isExpanded) {
+                updatePreview();
+            } else {
+                overlay.style.display = 'none';
+            }
+        });
+
+        overlay.addEventListener('click', () => {
+            const isExpanded = preview.classList.contains('preview-expanded');
+            if (isExpanded) {
+                preview.classList.remove('preview-expanded');
+                overlay.style.display = 'none';
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+        if (copyOptions.style.display === 'block') {
+            closeCopyOptions(); // 閉じる処理を呼び出す
+        } else if (preview.classList.contains('preview-expanded')) {
+            preview.classList.remove('preview-expanded');
+            overlay.style.display = 'none';
+        }
+    }
+});
+
+copyDownloadBtn.addEventListener('click', () => {
+    blurOverlay.style.display = 'flex';
+    copyOptions.style.display = 'block';
+    copyOptions.classList.add('animate'); // アニメーションを適用するためのクラス
+    copyOptions.style.opacity = '1'; // 不透明度を1に
+});
+
+
+
+        document.body.addEventListener('dblclick', (e) => {
+            if (!e.target.closest('button, textarea, .toggle')) {
+                preview.classList.toggle('preview-expanded');
+                overlay.style.display = preview.classList.contains('preview-expanded') ? 'block' : 'none';
+            }
+        });
+
+    
+
+
+
+
+
+
+        document.getElementById('copyHtml').addEventListener('click', () => {
+            navigator.clipboard.writeText(htmlInput.value).then(() => {
+                // ここで音を再生
+            const pasteSound = document.getElementById('pasteSound');
+            pasteSound.play();  // 音を再生
+                alert("HTMLがコピーされました");
+            });
+        });
+
+        document.getElementById('copyCss').addEventListener('click', () => {
+            navigator.clipboard.writeText(cssInput.value).then(() => {
+                // ここで音を再生
+            const pasteSound = document.getElementById('pasteSound');
+            pasteSound.play();  // 音を再生
+                alert("CSSがコピーされました");
+
+            });
+        });
+
+        document.getElementById('copyJs').addEventListener('click', () => {
+            navigator.clipboard.writeText(jsInput.value).then(() => {
+                // ここで音を再生
+            const pasteSound = document.getElementById('pasteSound');
+            pasteSound.play();  // 音を再生
+                alert("JavaScriptがコピーされました");
+            });
+        });
+
+// blurOverlayとcopyOptionsのフェードアウトを行う関数
+function closeCopyOptions() {
+    // `copyOptions`にフェードアウトアニメーションを追加
+    copyOptions.classList.add('fade-out');
+    
+    // `blurOverlay`にフェードアウトアニメーションを追加
+    blurOverlay.classList.add('fade-out');
+    
+    // アニメーションが完了するタイミング（500ms後）で処理を実行
+    setTimeout(() => {
+        // `blurOverlay`を非表示にする
+        blurOverlay.style.display = 'none'; 
+        
+        // `copyOptions`を非表示にする
+        copyOptions.style.display = 'none'; 
+        
+        // フェードアウトアニメーションのクラスを削除
+        copyOptions.classList.remove('fade-out');
+        blurOverlay.classList.remove('fade-out');
+    }, 500); // 500ms（アニメーションの時間）
+}
+
+// この部分を削除して以下を追加
+document.getElementById('closeOptions').addEventListener('click', closeCopyOptions);
+
+
+
+        // リアルタイムプレビューの初期化
+        document.addEventListener('DOMContentLoaded', () => {
+            updatePreview();
+            // 各入力フィールドの変更を監視
+            [htmlInput, cssInput, jsInput].forEach(input => {
+                input.addEventListener('input', updatePreview);
+            });
+        });
+
+    
+        const reloadBtn = document.getElementById('reloadBtn');
+const loadingOverlay = document.createElement('div');
+loadingOverlay.className = 'loading-overlay';
+const loadingMessage = document.createElement('div');
+loadingMessage.className = 'loading-message';
+loadingMessage.innerText = '再読み込み中...';
+loadingOverlay.appendChild(loadingMessage);
+document.body.appendChild(loadingOverlay);
+
+let isLoading = false; // ローディング中のフラグ
+
+reloadBtn.addEventListener('click', () => {
+    if (isLoading) return; // すでにローディング中の場合は何もしない
+    isLoading = true; // ローディング開始
+
+    // 背景を表示
+    loadingOverlay.style.display = 'flex';
+
+    // アニメーション開始
+    setTimeout(() => {
+        loadingOverlay.style.transform = 'translateY(0)'; // 下にスライドイン
+        loadingOverlay.style.opacity = '1'; // フェードイン
+    }, 0); // スタイルを設定後に実行
+
+    // 0.5秒後にメッセージを表示（フェードイン）
+    setTimeout(() => {
+        loadingMessage.style.opacity = '1'; // メッセージをフェードイン
+    }, 650); // カーテンの降下開始から0.5秒後に表示
+
+  
+    // 1.1秒後にフェードアウト開始
+    setTimeout(() => {
+        loadingOverlay.style.opacity = '0'; // オーバーレイをフェードアウト
+        loadingMessage.style.opacity = '0'; // メッセージもフェードアウト
+        
+        // スライド完了後に非表示にする
+        setTimeout(() => {
+            loadingOverlay.style.display = 'none'; // 完全に非表示に
+            isLoading = false; // ローディング完了
+            updatePreview(); // プレビューを更新
+        }, 250); // フェードアウトの時間
+    }, 1500); // メッセージが表示された後に1.1秒後にフェードアウトを開始
+});
+
+
+const inputField = document.querySelector('.input-field');
+
+inputField.addEventListener('dragover', (event) => {
+    event.preventDefault(); // デフォルトの動作を防ぐ
+    inputField.classList.add('dragging'); // アニメーションを追加
+});
+
+inputField.addEventListener('dragleave', () => {
+    inputField.classList.remove('dragging'); // アニメーションを削除
+});
+
+inputField.addEventListener('drop', (event) => {
+    event.preventDefault(); // デフォルトの動作を防ぐ
+    inputField.classList.remove('dragging'); // アニメーションを削除
+    // ファイル処理のロジック
+});
+
+// HTMLタグメニューの表示
+htmlTagsBtn.addEventListener('click', function() {
+    // メニュー表示
+    htmlTagsMenu.style.display = 'flex'; // メニューを表示
+    setTimeout(() => {
+        htmlTagsMenu.style.opacity = '1'; // メニューをフェードイン
+        htmlTagsMenu.style.transform = 'scale(1)'; // メニューを元のサイズに戻す
+        let items = tagList.getElementsByTagName('li');
+        Array.from(items).forEach((item, index) => {
+            setTimeout(() => {
+                item.classList.add('show');
+            }, index * 50); // 0.05秒間隔で表示
+        });
+    }, 50);
+});
+
+// 外部クリックでメニューを閉じる
+window.addEventListener('click', function(e) {
+    if (!htmlTagsMenu.contains(e.target) && e.target !== htmlTagsBtn) {
+        closeTagMenu();
+    }
+});
+
+// Escapeキーでメニューを閉じる
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeTagMenu();
+    }
+});
+
+// タグ挿入関数
+function insertTag(tag) {
+    let htmlInput = document.getElementById('htmlInput').value;
+    
+    // 新しいタグを追加
+    document.getElementById('htmlInput').value += tag;
+    showCopyNotification(tag);
+}
+
+// メニューを閉じる関数
+function closeTagMenu() {
+    let items = tagList.getElementsByTagName('li');
+    Array.from(items).forEach(item => item.classList.remove('show'));
+    htmlTagsMenu.style.opacity = '0';
+    htmlTagsMenu.style.transform = 'scale(0.8)';
+    setTimeout(() => {
+        htmlTagsMenu.style.display = 'none';
+    }, 300);
+}
+
+// その他タグの切り替え
+function toggleOtherTags() {
+    if (isOtherTagsActive) {
+        // その他タグを戻す
+        document.querySelectorAll('li').forEach((li, index) => {
+            if (index === 0) li.innerHTML = '<button>&lt;h1&gt; - タイトル</button>';
+            if (index === 1) li.innerHTML = '<button>&lt;h2&gt; - サブタイトル</button>';
+            if (index === 2) li.innerHTML = '<button>&lt;h3&gt; - 見出し</button>';
+            if (index === 3) li.innerHTML = '<button>&lt;h4&gt; - 小さい見出し（文字）</button>';
+            if (index === 4) li.innerHTML = '<button>&lt;p&gt; - 文字</button>';
+            if (index === 5) li.innerHTML = '<button>&lt;b&gt; - 太文字</button>';
+            if (index === 6) li.innerHTML = '<button>&lt;u&gt; - 下線</button>';
+            if (index === 7) li.innerHTML = '<button>&lt;span&gt; - 文字色変更</button>';
+            if (index === 8) li.innerHTML = '<button>&lt;a&gt; - ハイパーリンク</button>';
+        });
+        otherButtonText.innerHTML = 'その他';
+        otherButton.classList.remove('other-button-active');
+    } else {
+        // その他タグに切り替え
+        document.querySelectorAll('li').forEach((li, index) => {
+            if (index === 0) li.innerHTML = '<button>&lt;meter&gt; - 評価スコア</button>';
+            if (index === 1) li.innerHTML = '<button>&lt;del&gt; - 取り消し線</button>';
+            if (index === 2) li.innerHTML = '<button>&lt;mark&gt; - 強調表示</button>';
+            if (index === 3) li.innerHTML = '<button>&lt;h5&gt; - 小さい文字</button>';
+            if (index === 4) li.innerHTML = '<button>&lt;span&gt; - 文字サイズ指定</button>';
+            if (index === 5) li.innerHTML = '<button>&lt;marquee&gt; - 右から左に動く</button>';
+            if (index === 6) li.innerHTML = '<button>&lt;hr&gt; - 区切り線</button>';
+            if (index === 7) li.innerHTML = '<button>&lt;h6&gt; - かなり小さい文字</button>';
+            if (index === 8) li.innerHTML = '<button>&lt;br&gt; - 改行</button>';
+        });
+        otherButtonText.innerHTML = '戻す';
+        otherButton.classList.add('other-button-active');
+    }
+    isOtherTagsActive = !isOtherTagsActive;
+}
+
+
+
+
+    </script>
+</body>
+</html>
