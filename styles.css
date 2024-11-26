@@ -167,7 +167,6 @@ border: none; /* ボタンの枠線を消す */
     /* ホバー時のスタイル（オプション） */
     button:hover {
         box-shadow: 8px 8px 32px rgba(0, 0, 0, 0.15);
-        background-color: rgba(210, 210, 236, 0.4);
         text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
         transform: scale(1.01);
     }
@@ -491,7 +490,7 @@ transition: opacity 0.5s ease; /* メッセージのフェードイン */
 
 /* ボタンのホバー時のスタイル */
 button:hover {
-    transform: scale(0.95);
+    transform: scale(0.97);
 }
 
 /* ボタンのアクティブ時のスタイル */
