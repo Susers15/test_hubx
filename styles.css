@@ -147,7 +147,7 @@ border: none; /* ボタンの枠線を消す */
       display: block; /* ボタンを縦並びに */
       width: 100%; /* 横幅を100%にして画面全体を使う */
       box-sizing: border-box; /* パディングを含めた幅を計算 */
-      margin: -5px 0; /* ボタン間に縦の余白を確保 */
+      margin: 6px 0; /* ボタン間に縦の余白を確保 */
       background-color: rgb(0, 0, 0);
     }
     .button-container {
@@ -212,8 +212,8 @@ transform: scale(1.05);
     position: fixed;
     top: 50%;
     left: 50%;
-    width: 88vw;
-    height: 88vh;
+    width: 85vw;
+    height: 87vh;
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     transform: translate(-50%, -50%);
@@ -301,7 +301,7 @@ transform: scale(1.05);
 .copy-btn:hover {
 transform: scale(1.05); /* サイズ変更アニメーション */
 border-color: none;
-background-color: rgba(163, 163, 179, 0.4);
+background-color: rgba(0, 0, 0, 0.99);
 text-shadow: 2px 3px 8px rgba(0, 0, 0, 0.338);
 }
 .close-options-btn
@@ -502,7 +502,7 @@ button:active {
 
 /* normal-buttonのスタイル */
 .normal-button {
-    background-color: rgba(0, 0, 0, 0.405);
+    background-color: rgba(0, 0, 0, 1);
     color: white;
     box-shadow: 1 5px 7px rgba(0, 0, 0, 0.300);
 }
