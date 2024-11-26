@@ -528,15 +528,15 @@ li.show {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    padding: 8px;
+    padding: 9px;
     background-color: rgb(236, 236, 236);
     border: 0.1px solid rgb(200, 200, 200);
-    border-radius: 8px;
+    border-radius: 9px;
     color: black;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
-    font-size: 10px; /* フォントサイズ */
+    font-size: 11px; /* フォントサイズ */
     z-index: 9999; /* 最前面に表示 */
     
     /* 文字を中央揃え */
