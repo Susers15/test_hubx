@@ -28,11 +28,11 @@
             <ul id="tagList">
 
 <!-- 既存のHTMLタグ一覧 -->
-    <li onclick="insertTag('')"><button>&lt;h1&gt; - タイトル</button></li>
+    <li onclick="insertTag('')"><button>&lt;h1&gt; - ホームページ</button></li>
 
                 <li onclick="insertTag('')"><button>&lt;h2&gt; - サブタイトル</button></li>
                 <li onclick="insertTag('')"><button>&lt;h3&gt; - 見出し</button></li>
-                <li onclick="insertTag('')"><button>&lt;h4&gt; - 小さい見出し</button></li>
+                <li onclick="insertTag('')"><button> &lt;h1&gt;・&lt;h4&gt; - h1とh4</button></li>
                 <li onclick="insertTag()"><button>&lt;p&gt; - 文字</button></li>
                 <li onclick="insertTag('')"><button>&lt;b&gt; - 太文字</button></li>
                 <li onclick="insertTag('')"><button>&lt;u&gt; - 下線</button></li>
@@ -128,10 +128,10 @@
             if (isOtherTagsActive) {
                 // その他タグを戻す
                 document.querySelectorAll('li').forEach((li, index) => {
-                    if (index === 0) li.innerHTML = '<button>&lt;h1&gt; - タイトル</button>';
+                    if (index === 0) li.innerHTML = '<button>&lt;h1&gt; - ホームページ</button>';
                     if (index === 1) li.innerHTML = '<button>&lt;h2&gt; - サブタイトル</button>';
                     if (index === 2) li.innerHTML = '<button>&lt;h3&gt; - 見出し</button>';
-                    if (index === 3) li.innerHTML = '<button>&lt;h4&gt; - 小さい見出し</button>';
+                    if (index === 3) li.innerHTML = '<button>&lt;h1&gt;・&lt;h4&gt; - h1とh4</button>';
                     if (index === 4) li.innerHTML = '<button>&lt;p&gt; - 文字</button>';
                     if (index === 5) li.innerHTML = '<button>&lt;b&gt; - 太文字</button>';
                     if (index === 6) li.innerHTML = '<button>&lt;u&gt; - 下線</button>';
@@ -193,7 +193,7 @@
                 } else {
                     // 通常のタグ群のコピー
                     switch (tag) {
-    case '<h1> - タイトル':
+    case '<h1> - ホームページ':
         // 改行とインデントを含んだHTMLコード
         var htmlContent = `
 <html>
@@ -238,8 +238,8 @@
                             insertTag('<h2>サブタイトル</h2>'); break;
                         case '<h3> - 見出し':
                             insertTag('<h3>見出し</h3>'); break;
-                        case '<h4> - 小さい見出し':
-                            insertTag('<h4>小さい見出し</h4>'); break;
+                        case '<h1>・<h4> - h1とh4':
+                            insertTag('<h1>タイトル</h1> <h4>小さい見出し</h4>'); break;
                         case '<p> - 文字':
                             insertTag('<p>文字を入力...</p>'); break;
                         case '<b> - 太文字':
@@ -743,10 +743,10 @@ function toggleOtherTags() {
     if (isOtherTagsActive) {
         // その他タグを戻す
         document.querySelectorAll('li').forEach((li, index) => {
-            if (index === 0) li.innerHTML = '<button>&lt;h1&gt; - タイトル</button>';
+            if (index === 0) li.innerHTML = '<button>&lt;h1&gt; - ホームページ</button>';
             if (index === 1) li.innerHTML = '<button>&lt;h2&gt; - サブタイトル</button>';
             if (index === 2) li.innerHTML = '<button>&lt;h3&gt; - 見出し</button>';
-            if (index === 3) li.innerHTML = '<button>&lt;h4&gt; - 小さい見出し</button>';
+            if (index === 3) li.innerHTML = '<button>&lt;h1&gt;・&lt;h4&gt; - h1とh4</button>';
             if (index === 4) li.innerHTML = '<button>&lt;p&gt; - 文字</button>';
             if (index === 5) li.innerHTML = '<button>&lt;b&gt; - 太文字</button>';
             if (index === 6) li.innerHTML = '<button>&lt;u&gt; - 下線</button>';
