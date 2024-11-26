@@ -4,10 +4,11 @@ body {
     align-items: center;
     margin: 20px;
     font-family: 'San Francisco', sans-serif;
-    background-image: url('background.jpg');
     background-size: cover;
     background-position: center;
 }
+
+
 
 .overlay {
     position: fixed;
@@ -29,13 +30,49 @@ body {
     flex-direction: column;
     align-items: center;
     margin: 20px auto;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.316);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: -1px 55px 82px rgba(0, 0, 0, 0.2);
     max-width: 800px;
     width: 100%;
     text-align: left;
-    background-color: rgba(255, 255, 255, 0.342);
+    background-color: rgba(232, 232, 236, 0.342);
+    transition: all 0.3s ease-out, transform 0.3s ease;
+    z-index: 1; /* #htmlTagsMenuより背面に表示されるようにする */
+}
+
+/* #htmlTagsMenuが表示されているとき、startScreenのホバーを無効にする */
+#htmlTagsMenu.active ~ #startScreen:hover {
+    pointer-events: none; /* クリックやホバーを無効にする */
+    transform: none; /* ホバー時のエフェクトを無効にする */
+}
+
+none {
+    box-shadow: -1px 55px 82px rgba(0, 0, 0, 0.2);
+    background-color: rgba(232, 232, 238, 0.342);
+    transform: scale(0.99);
+}
+/* #htmlTagsMenuがアクティブの時 */
+#htmlTagsMenu.active {
+    /* 必要に応じて#htmlTagsMenu自身のスタイル変更 */
+    pointer-events: auto; /* メニュー自体にはクリックできるように */
+}
+
+/* #htmlTagsMenuがアクティブの時、#htmlTagsMenuとその子要素以外のアニメーションを無効化 */
+#htmlTagsMenu.active ~ * {
+    pointer-events: none; /* アニメーションが無効化される */
+    transform: none; /* アニメーションのトランスフォームを無効化 */
+    transition: none; /* トランジションを無効化 */
+}
+
+/* 特定の要素にはアニメーションを有効にする */
+#htmlTagsMenu.active, 
+#htmlTagsMenu.active .html-tags-content, 
+#htmlTagsMenu.active #htmlTagsMenu ul li,
+#htmlTagsMenu.active button {
+    pointer-events: auto; /* これらの要素にはクリックイベントを許可 */
+    transform: none; /* これらの要素のtransformを無効化しない */
+    transition: all 0.3s ease-out; /* 必要に応じて遷移を設定 */
 }
 
 .toggle {
@@ -45,9 +82,9 @@ body {
     margin-bottom: 10px;
     padding: 15px;
     border: none;
-    border-radius: 5px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    background-color: rgba(255, 255, 255, 0.814);
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: rgba(212, 212, 220, 0.814);
     font-weight: bold;
     font-size: 18px;
     color: black;
@@ -55,26 +92,14 @@ body {
 }
 
 .toggle:hover {
-    background-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 8px 8px 32px rgba(0, 0, 0, 0.15);
+    background-color: rgba(210, 210, 236, 0.4);
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-    transform: scale(1.05);
+    transform: scale(1.01);
+    
 }
 
-.resizable {
-    width: calc(100% - 24px);
-    height: 200px;
-    border-radius: 5px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    padding: 10px;
-    font-family: inherit;
-    overflow: auto;
-    resize: vertical;
-    border: none;
-    margin: 12px;
-    transition: height 0.5s ease, padding 0.5s ease, opacity 0.5s ease;
-    background-color: rgba(255, 255, 255, 0.57);
-    color: rgba(0, 0, 0, 0.883);
-}
+
 
 .resizable.closed {
     height: 0;
@@ -85,14 +110,15 @@ body {
 iframe {
     width: calc(100% - 36px);
     height: 300px;
-    border-radius: 5px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     border: none;
     position: relative;
     z-index: 1;
-    background-color: rgba(255, 255, 255, 0.55);
-    padding: 12px;
+    background-color: rgba(212, 212, 220, 0.814);
+    padding: 25px;
     transition: all 0.5s ease;
+    margin-top:25px
 }
 
 .button-container {
@@ -105,21 +131,45 @@ iframe {
 }
 button {
     padding: 15px 25px;
-border-radius: 5px;
+border-radius: 8px;
 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 transition: all 0.3s ease;
-font-size: 17px;
+font-size: 15px;
 margin: 0 12px;
-background-color: rgba(255, 255, 255, 0.541);
-color: black;
 border: none; /* ボタンの枠線を消す */
 }
+
+/* スマートフォン用のスタイル（画面幅768px以下） */
+@media (max-width: 768px) {
+    /* ボタンを縦並びに */
+    button {
+      display: block; /* ボタンを縦並びに */
+      width: 100%; /* 横幅を100%にして画面全体を使う */
+      box-sizing: border-box; /* パディングを含めた幅を計算 */
+      margin: 10px 0; /* ボタン間に縦の余白を確保 */
+    }
+  
+    /* ボタンのスタイルをさらにカスタマイズ */
+    .reset-btn, .expand-btn, .copy-download-btn, .normal-button {
+        background-color: rgba(215, 215, 236, 0.4);
+    }
+  
+    /* ホバー時のスタイル（オプション） */
+    button:hover {
+        box-shadow: 8px 8px 32px rgba(0, 0, 0, 0.15);
+        background-color: rgba(210, 210, 236, 0.4);
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        transform: scale(1.01);
+    }
+  }
+
+
 .expand-btn, .reset-btn, .copy-download-btn, #reloadBtn {
 padding: 15px 25px;
-border-radius: 5px;
-box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+border-radius: 8px;
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 transition: all 0.3s ease;
-font-size: 17px;
+font-size: 15px;
 margin: 0 12px;
 background-color: rgba(255, 255, 255, 0.541);
 color: black;
@@ -130,8 +180,10 @@ border: none; /* ボタンの枠線を消す */
 .reset-btn:hover,
 .copy-download-btn:hover,
 #reloadBtn:hover {
-text-shadow: 2px 3px 8px rgba(0, 0, 0, 0.303);
-transform: scale(1.11);
+    background-color: rgba(232, 232, 236, 0.541);
+text-shadow: 2px 3px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+transform: scale(1.05);
 }
 
 .preview-overlay {
@@ -152,56 +204,17 @@ transform: scale(1.11);
     left: 50%;
     width: 88vw;
     height: 88vh;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     transform: translate(-50%, -50%);
     z-index: 10;
     transition: all 0.5s ease;
     background-color: rgba(255, 255, 255, 0.55);
 }
 
-.close-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: rgb(255, 255, 255);
-    color: black;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-    z-index: 11;
-    border: none; /* ボタンの枠線を消す */
-}
 
-.close-btn:hover {
-    background-color: rgba(240, 240, 240, 1);
-    transform: scale(1.1);
-}
 
-pre {
-    background-color: #f0f0f0;
-    padding: 10px;
-    border-radius: 5px;
-    overflow-x: auto;
-    margin: 0;
-}
 
-code {
-    font-family: 'Courier New', Courier, monospace;
-}
-
-.syntax-html {
-    color: blue;
-}
-
-.syntax-css {
-    color: green;
-}
-
-.syntax-js {
-    color: brown;
-}
 
 @media (prefers-color-scheme: dark) {
     body {
@@ -211,42 +224,16 @@ code {
 
 
     #startScreen {
-        background: rgba(0, 0, 0, 0.55);
-        color: white;
+        background: rgba(21, 21, 21, 0.573);
+        color: rgb(0, 0, 0);
     }
 
-    .toggle {
-        background-color: rgb(0, 0, 0);
-        color: white;
-    }
-
-    .resizable {
-        background-color: rgba(50, 50, 50, 0.647);
-        color: rgba(255, 255, 255, 0.738);
-    }
-
-    .expand-btn {
-        background-color: rgb(0, 0, 0);
-        color: white;
-    }
-
-    .close-btn {
-        background-color: black;
-        color: rgba(255, 255, 255, 0.787);
-    }
-
-    iframe {
-        background-color: rgba(0, 0, 0, 0.55);
-    }
-}
-.input-field {
-transition: all 0.3s ease; /* すべての変化に対してスムーズな遷移を追加 */
+   
 }
 
 
-.input-field.dragging {
-border: 2px dashed #007bff; /* ドラッグ中のスタイル */
-}
+
+
 @keyframes shake {
     0%, 100% { transform: translateX(0); }
     25% { transform: translateX(-20px); }
@@ -262,7 +249,7 @@ border: 2px dashed #007bff; /* ドラッグ中のスタイル */
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgb(170 170 170 / 34%);
     backdrop-filter: blur(5px);
     display: none;
     z-index: 999;
@@ -270,66 +257,35 @@ border: 2px dashed #007bff; /* ドラッグ中のスタイル */
     align-items: center;
 }
 
-.copy-options {
-background-color: rgba(255, 255, 255, 0.5); /* 不透明度50%の白 */
-padding: 20px;
-border-radius: 8px;
-box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-text-align: center;
-display: none;
-opacity: 0; /* 初期の不透明度 */
-transition: all 0.5s ease;
-}
 
-
-.copy-btn {
-margin: 10px;
-padding: 15px; /* ボタンのサイズを調整 */
-border-radius: 5px; /* 既存のスタイル */
-background-color: #007BFF; /* 背景色 */
-color: black; /* テキスト色を黒に */
-border: 2px solid transparent; /* 枠線を透明に */
-cursor: pointer;
-transition: transform 0.2s, border-color 0.2s; /* サイズと枠のアニメーション */
-font-size: 15px; /* ボタンサイズを大きくする */
-box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* 影を追加 */
-}
 
 
 
 .close-options-btn,
 .reset-btn {
-padding: 15px; /* ボタンの大きさを均一に */
-border-radius: 5px; /* 角を丸くする */
-background-color: red; /* 背景色を赤に */
-color: white; /* 文字色を白に */
+padding: 0 18px; /* ボタンの大きさを均一に */
+background-color: rgba(212, 212, 220, 0.814); /* 背景色を赤に */
+color: rgb(255, 255, 255); /* 文字色を白に */
 font-weight: bold; /* 太文字 */
 border: none; /* 枠線を消す */
 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* 影を残す */
-transition: transform 0.3s ease; /* アニメーション */
+transition: transform 0.3s ease-in-out; /* アニメーション */
+box-shadow: inset 8px 8px 32px rgba(0, 0, 0, 0.15); /* 内側に影 */
 }
 
 .close-options-btn {
-padding: 15px; /* ボタンのサイズを統一 */
-border-radius: 5px; /* 角を丸くする */
+padding: 14px; /* ボタンのサイズを統一 */
 background-color: rgba(255, 0, 60, 0.86); /* 背景色を赤に */
-color: white; /* 文字色を白に */
-border: 2px solid red; /* 枠線を赤に */
-cursor: pointer;
 transition: transform 0.2s; /* アニメーション */
 font-size: 18px; /* サイズを合わせる */
-box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* 影を追加 */
+box-shadow: 8px 8px 32px rgba(0, 0, 0, 0.15); /* 影を追加 */
 }
 .close-options-btn:hover {
-
-text-shadow: 2px 3px 8px rgba(0, 0, 0, 0.214);
-transform: scale(1.11);
+    box-shadow: inset 5px 5px 30px rgba(0, 0, 0, 0.22); /* 内側に影 */
+text-shadow: 8px 8px 32px rgba(0, 0, 0, 0.4);
+transform: scale(1.05);
 }
 
-
-.close-options-btn:hover {
-transform: scale(1.1); /* サイズ変更アニメーション */
-}
 
 
 .copy-btn:hover {
@@ -352,6 +308,7 @@ text-shadow: 2px 3px 8px rgba(0, 0, 0, 0.338);
 }
 @keyframes fadeInExpand {
 0% {
+    display: block; /* 表示時にブロックにする */
 opacity: 0;
 transform: scale(0.8);
 }
@@ -377,10 +334,10 @@ transform: scale(0.8);
 
 
 .copy-options {
-background-color: rgba(255, 255, 255, 0.5); /* 不透明度50%の白 */
+background-color: rgba(242, 242, 242, 0.763); /* 不透明度50%の白 */
 padding: 20px;
-border-radius: 8px;
-box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+border-radius: 15px;
+box-shadow: 0 4px 22px rgba(0, 0, 0, 0.1);
 text-align: center;
 display: none;
 opacity: 0; /* 初期の不透明度 */
@@ -407,8 +364,7 @@ top: 0;
 left: 0;
 width: 100vw;
 height: 100vh;
-background-color: rgba(0, 0, 0, 0.770);
-background-color: rgba(0, 0, 0, 0.770);
+background-color: rgba(98, 98, 98, 0.38);
 backdrop-filter: blur(10px);
 z-index: 999;
 display: none; /* 初めは非表示 */
@@ -420,58 +376,63 @@ transition: transform 0.7s ease, opacity 0.7s ease; /* スライドと不透明�
 }
 
 .loading-message {
-color: white;
+color: rgb(255, 255, 255);
+text-shadow: 2px 12px 32px #000000;
 font-weight: bold;
 opacity: 0; /* 初期の不透明度 */
 transition: opacity 0.5s ease; /* メッセージのフェードイン */
 }
 
+/* #htmlTagsMenuのスタイル */
 #htmlTagsMenu {
-    position: fixed; /* 画面に固定 */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.445); /* 半透明の背景 */
-    z-index: 9999; /* 他の要素より前面に表示 */
-    display: none; /* 最初は非表示 */
+    background-color: rgb(184 184 184 / 48%);
+    z-index: 9999; /* 前面に表示 */
+    display: none;
     opacity: 0;
+    border-radius: 5px;
     transform: scale(0.8);
     transition: opacity 0.3s, transform 0.3s;
 }
 
+/* htmlTagsMenuのコンテンツのスタイル */
 #htmlTagsMenu .html-tags-content {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.4);
     padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    box-shadow: 3px 8px 35px rgba(0, 0, 0, 0.2);
 }
 
-
-/* #htmlTagsMenu ulのスタイル */
+/* ulのスタイル */
 #htmlTagsMenu ul {
     list-style: none;
     padding: 0;
     margin: 0;
-    overflow-x: hidden; /* 横スクロールは表示しない */
-    overflow-y: hidden; /* 縦スクロールバーは非表示 */
-    width: 100%; /* 横幅を親要素に合わせる */
-    display: grid; /* グリッドレイアウト */
-    grid-template-columns: repeat(2, 1fr); /* 2列のグリッド */
-    justify-items: center; /* 各アイテム（li）を中央揃え */
-    gap: 10px; /* アイテム間の間隔 */
+    overflow-x: hidden;
+    overflow-y: hidden;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    justify-items: center;
+    gap: 10px;
 }
 
-/* #htmlTagsMenu ul liのスタイル */
+/* ul liのスタイル */
 #htmlTagsMenu ul li {
-    margin: 5px 0;
-    display: flex; /* ボタンを横長にするためにフレックスボックスに変更 */
-    justify-content: center; /* ボタンを横方向で中央揃え */
+    margin: 7px 0;
+    display: flex;
+    justify-content: center;
 }
+
+
 
 /* button要素のスタイル */
 #htmlTagsMenu ul li button {
@@ -480,11 +441,16 @@ transition: opacity 0.5s ease; /* メッセージのフェードイン */
     text-align: center; /* ボタン内のテキストを中央揃え */
     box-sizing: border-box; /* paddingを含めて幅計算 */
     margin: 0; /* ボタンの周りの余白をリセット */
+    background-color: rgba(255, 255, 255, 0.61); /* ボタンの背景色は黒 */
+    color: black; /* ボタンの文字色は白 */
+    border: none; /* 枠線なし */
+    border-radius: 5px; /* 丸みのある角 */
+    text-shadow:1px 5px 8px rgba(15, 15, 15, 0.3);
+    transition: background-color 0.3s, transform 0.3s; /* アニメーションを追加 */
 }
 
-/* .html-tags-menuのスタイル */
+/* .html-tags-menuのスタイル（ライトモード） */
 .html-tags-menu {
-    background-color: rgb(255, 255, 255);
     padding: 5px;
     border-radius: 5px;
     display: none;
@@ -495,15 +461,22 @@ transition: opacity 0.5s ease; /* メッセージのフェードイン */
     max-height: 80vh;
     opacity: 0;
     transform: scale(0.8);
+    
     transition: opacity 0.3s ease-in-out, transform 0.5s ease-in-out;
+    
 }
+
+
 
 /* .html-tags-contentのスタイル */
 .html-tags-content {
     padding: 20px; /* 520pxは誤植かと思われます。余白を20pxに変更 */
-    color: inherit;
+    color: black;
     margin-top: -20px;
+    text-shadow: 2px 10px 15px rgba(111, 111, 111, 0.63);
 }
+
+
 
 /* ボタンのホバー時のスタイル */
 button:hover {
@@ -513,13 +486,14 @@ button:hover {
 /* ボタンのアクティブ時のスタイル */
 button:active {
     transform: scale(0.95);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* normal-buttonのスタイル */
 .normal-button {
-    background-color: black;
+    background-color: rgba(0, 0, 0, 0.405);
     color: white;
+    box-shadow: 1 5px 7px rgba(0, 0, 0, 0.300);
 }
 
 /* ulタグのグリッドレイアウト */
@@ -603,27 +577,32 @@ li.show {
 .resizable {
     width: calc(100% - 24px);
     height: 200px;
-    border-radius: 5px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     padding: 10px;
     font-family: inherit;
     overflow: auto;
-    resize: vertical;
     border: none;
     margin: 12px;
     transition: height 0.5s ease, padding 0.5s ease, opacity 0.5s ease;
-    background-color: rgba(255, 255, 255, 0.57);
+    background-color: rgb(248, 248, 248);
     color: rgba(0, 0, 0, 0.883);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, height 0.5s ease, padding 0.5s ease, opacity 0.5s ease;
 }
+
+
+
+
 
 .resizable:hover {
     transform: scale(1.02);
+    box-shadow: -1px 5px 82px rgba(0, 0, 0, 0.2);
+    background-color: rgba(232, 232, 238, 0.342);
 }
 .other-button-active {
     opacity: 0.65;
     background-color: rgba(0, 0, 0, 0.374);
-    border-radius: 5px;
+    border-radius: 8px;
     transition: opacity 0.3s ease-in-out, transform 0.5s ease-in-out;
 }
 
