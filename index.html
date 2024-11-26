@@ -20,9 +20,9 @@
        <div class="button-container">
     <button id="resetBtn" class="reset-btn"> × 削除</button>
     <button id="expandBtn" class="expand-btn">拡大</button>
-    <button id="reloadBtn" class="expand-btn">再読み込み</button> <!-- 追加 -->
-    <button id="copyDownloadBtn" class="copy-download-btn">コピー・ダウンロード</button>
-    <button class="normal-button" id="htmlTagsBtn">HTMLタグ一覧</button> <div class="overlay" id="htmlTagsMenu">
+    <button id="reloadBtn" class="expand-btn">反映&読み込み</button> <!-- 追加 -->
+    <button id="copyDownloadBtn" class="copy-download-btn">＋ コピー</button>
+    <button class="normal-button" id="htmlTagsBtn">HTMLタグを追加</button> <div class="overlay" id="htmlTagsMenu">
         <div class="html-tags-content">
             <h2>　タグを追加</h2>
             <ul id="tagList">
@@ -32,7 +32,7 @@
 
                 <li onclick="insertTag('')"><button>&lt;h2&gt; - サブタイトル</button></li>
                 <li onclick="insertTag('')"><button>&lt;h3&gt; - 見出し</button></li>
-                <li onclick="insertTag('')"><button>&lt;h4&gt; - 小さい見出し（文字）</button></li>
+                <li onclick="insertTag('')"><button>&lt;h4&gt; - 小さい見出し</button></li>
                 <li onclick="insertTag()"><button>&lt;p&gt; - 文字</button></li>
                 <li onclick="insertTag('')"><button>&lt;b&gt; - 太文字</button></li>
                 <li onclick="insertTag('')"><button>&lt;u&gt; - 下線</button></li>
@@ -131,7 +131,7 @@
                     if (index === 0) li.innerHTML = '<button>&lt;h1&gt; - タイトル</button>';
                     if (index === 1) li.innerHTML = '<button>&lt;h2&gt; - サブタイトル</button>';
                     if (index === 2) li.innerHTML = '<button>&lt;h3&gt; - 見出し</button>';
-                    if (index === 3) li.innerHTML = '<button>&lt;h4&gt; - 小さい見出し（文字）</button>';
+                    if (index === 3) li.innerHTML = '<button>&lt;h4&gt; - 小さい見出し</button>';
                     if (index === 4) li.innerHTML = '<button>&lt;p&gt; - 文字</button>';
                     if (index === 5) li.innerHTML = '<button>&lt;b&gt; - 太文字</button>';
                     if (index === 6) li.innerHTML = '<button>&lt;u&gt; - 下線</button>';
@@ -148,9 +148,9 @@
                     if (index === 2) li.innerHTML = '<button>&lt;mark&gt; - 強調表示</button>';
                     if (index === 3) li.innerHTML = '<button>&lt;h5&gt; - 小さい文字</button>';
                     if (index === 4) li.innerHTML = '<button>&lt;span&gt; - 文字サイズ指定</button>';
-                    if (index === 5) li.innerHTML = '<button>&lt;marquee&gt; - 右から左に動く</button>';
+                    if (index === 5) li.innerHTML = '<button>&lt;marquee&gt; - 右から左</button>';
                     if (index === 6) li.innerHTML = '<button>&lt;hr&gt; - 区切り線</button>';
-                    if (index === 7) li.innerHTML = '<button>&lt;h6&gt; - かなり小さい文字</button>';
+                    if (index === 7) li.innerHTML = '<button>&lt;h6&gt; - 超小さい文字</button>';
                     if (index === 8) li.innerHTML = '<button>&lt;br&gt; - 改行</button>';
                 });
                 otherButtonText.innerHTML = '戻す';
@@ -177,12 +177,12 @@
                             insertTag('<h5>小さい文字</h5>'); break;
                         case '<span> - 文字サイズ指定':
                             insertTag('<p><span style="font-size: 24px;">文字サイズを24pxに変更した文字</span></p>'); break;
-                        case '<marquee> - 右から左に動く':
+                        case '<marquee> - 右から左':
                             insertTag('<marquee>みぎからひだりに</marquee>'); break;
                         case '<hr> - 区切り線':
                             insertTag('<hr> <!-- 水平線 -->'); break;
-                        case '<h6> - かなり小さい文字':
-                            insertTag('<h6>かなり小さい文字</h6>'); break;
+                        case '<h6> - 超小さい文字':
+                            insertTag('<h6>超小さい文字</h6>'); break;
                         case '<br> - 改行':
                             insertTag('<br>'); break;
                         default:
@@ -193,13 +193,52 @@
                 } else {
                     // 通常のタグ群のコピー
                     switch (tag) {
-                        case '<h1> - タイトル':
-                            insertTag('<h1>タイトル</h1>'); break;
+    case '<h1> - タイトル':
+        // 改行とインデントを含んだHTMLコード
+        var htmlContent = `
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>サイト名</title>
+</head>
+<body>
+    <header>
+        <h1>サンプルWebページ</h1>
+    </header>
+
+    <ul>
+        <li><a href="#home">ホーム</a></li>
+        <li><a href="#contact">お問い合わせ</a></li>
+    </ul>
+
+    <main>
+        <section id="home">
+            <h2>・ホーム</h2>
+            <p>ここはホームセクションです。簡単な紹介文を記載します。</p>
+            <img src="images/sample-image.jpg" alt="サンプル画像" class="sample-image">
+        </section>
+
+        <section id="contact">
+            <h2>・お問い合わせ</h2>
+            <p>お問い合わせセクションです。ご連絡は以下の方法でお願いします。</p>
+        </section>
+    </main>
+
+    <footer>
+        <h3>フッター（最下部）</h3>
+    </footer>
+</body>
+</html>
+`;  // テンプレートリテラルで改行を保持
+
+        // insertTag関数を使ってコピー
+        insertTag(htmlContent);
+        break;
                         case '<h2> - サブタイトル':
                             insertTag('<h2>サブタイトル</h2>'); break;
                         case '<h3> - 見出し':
                             insertTag('<h3>見出し</h3>'); break;
-                        case '<h4> - 小さい見出し（文字）':
+                        case '<h4> - 小さい見出し':
                             insertTag('<h4>小さい見出し</h4>'); break;
                         case '<p> - 文字':
                             insertTag('<p>文字を入力...</p>'); break;
@@ -232,6 +271,7 @@ function showCopyNotification(tag) {
     }, 700); // 0.7秒後にフェードアウト
 }
 
+
 // 取り消し通知の表示
 function showUndoNotification() {
     copyNotification.textContent = '取り消し';
@@ -241,13 +281,40 @@ function showUndoNotification() {
     }, 700); // 0.7秒後にフェードアウト
 }
 
+// ペースト通知の表示
+function showPasteNotification() {
+    copyNotification.textContent = 'ペースト';
+    copyNotification.style.opacity = '1';
+    setTimeout(() => {
+        copyNotification.style.opacity = '0';
+    }, 700); // 0.7秒後にフェードアウト
+}
+
 // キーボードイベントリスナー
 document.addEventListener('keydown', function (e) {
-    // Ctrl+Z または Cmd+Z を検出
+    // Cmd+Z または Ctrl+Z を検出
     if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
         showUndoNotification(); // 取り消し通知を表示
     }
+    // Cmd+V または Ctrl+V を検出
+    else if ((e.ctrlKey || e.metaKey) && e.key === 'v') {
+        showPasteNotification(); // ペースト通知を表示
+    }
 });
+
+
+
+
+// コピー通知の表示関数
+function showCopyNotification(action, content = '') {
+    copyNotification.textContent = `${action}${content ? ': ' + content : ''}`;
+    copyNotification.style.opacity = '1';
+    setTimeout(() => {
+        copyNotification.style.opacity = '0';
+    }, 700); // 0.7秒後にフェードアウト
+}
+
+
 
 // 例：コピー操作を模倣
 function copyText(tag) {
@@ -275,7 +342,7 @@ document.getElementById('copy-button').addEventListener('click', () => {
             <h3>コピーするコードを選択</h3>
             <button class="copy-btn" id="copyHtml" style="background-color: white;">HTMLをコピー</button>
             <button class="copy-btn" id="copyCss" style="background-color: white;">CSSをコピー</button>
-            <button class="copy-btn" id="copyJs" style="background-color: rgb(255, 255, 255);">JavaScriptをコピー</button>
+            <button class="copy-btn" id="copyJs" style="background-color: rgb(255, 255, 255);">Scriptをコピー</button>
             
             <button class="close-options-btn" id="closeOptions"　style="background-color: rgba(255, 0, 60, 0.86);">閉じる</button>
         </div>
@@ -474,33 +541,53 @@ copyDownloadBtn.addEventListener('click', () => {
 
 
 
-        document.getElementById('copyHtml').addEventListener('click', () => {
-            navigator.clipboard.writeText(htmlInput.value).then(() => {
-                // ここで音を再生
-            const pasteSound = document.getElementById('pasteSound');
-            pasteSound.play();  // 音を再生
-                alert("HTMLがコピーされました");
-            });
-        });
+      // コピー通知の要素を作成
 
-        document.getElementById('copyCss').addEventListener('click', () => {
-            navigator.clipboard.writeText(cssInput.value).then(() => {
-                // ここで音を再生
-            const pasteSound = document.getElementById('pasteSound');
-            pasteSound.play();  // 音を再生
-                alert("CSSがコピーされました");
+// コピー通知の表示関数
+function showCopyNotification(tag) {
+    copyNotification.textContent = `コピー・${tag}`;
+    copyNotification.style.opacity = '1';
+    setTimeout(() => {
+        copyNotification.style.opacity = '0';
+    }, 700); // 0.7秒後にフェードアウト
+}
 
-            });
-        });
+// HTMLのコピー処理
+document.getElementById('copyHtml').addEventListener('click', () => {
+    navigator.clipboard.writeText(htmlInput.value).then(() => {
+        // 音を再生
+        const pasteSound = document.getElementById('pasteSound');
+        pasteSound.play();
+        
+        // コピー通知を表示
+        showCopyNotification('HTML');
+    });
+});
 
-        document.getElementById('copyJs').addEventListener('click', () => {
-            navigator.clipboard.writeText(jsInput.value).then(() => {
-                // ここで音を再生
-            const pasteSound = document.getElementById('pasteSound');
-            pasteSound.play();  // 音を再生
-                alert("JavaScriptがコピーされました");
-            });
-        });
+// CSSのコピー処理
+document.getElementById('copyCss').addEventListener('click', () => {
+    navigator.clipboard.writeText(cssInput.value).then(() => {
+        // 音を再生
+        const pasteSound = document.getElementById('pasteSound');
+        pasteSound.play();
+        
+        // コピー通知を表示
+        showCopyNotification('CSS');
+    });
+});
+
+// JavaScriptのコピー処理
+document.getElementById('copyJs').addEventListener('click', () => {
+    navigator.clipboard.writeText(jsInput.value).then(() => {
+        // 音を再生
+        const pasteSound = document.getElementById('pasteSound');
+        pasteSound.play();
+        
+        // コピー通知を表示
+        showCopyNotification('JavaScript');
+    });
+});
+
 
 // blurOverlayとcopyOptionsのフェードアウトを行う関数
 function closeCopyOptions() {
@@ -524,6 +611,7 @@ function closeCopyOptions() {
     }, 500); // 500ms（アニメーションの時間）
 }
 
+
 // この部分を削除して以下を追加
 document.getElementById('closeOptions').addEventListener('click', closeCopyOptions);
 
@@ -538,7 +626,6 @@ document.getElementById('closeOptions').addEventListener('click', closeCopyOptio
             });
         });
 
-    
         const reloadBtn = document.getElementById('reloadBtn');
 const loadingOverlay = document.createElement('div');
 loadingOverlay.className = 'loading-overlay';
@@ -659,7 +746,7 @@ function toggleOtherTags() {
             if (index === 0) li.innerHTML = '<button>&lt;h1&gt; - タイトル</button>';
             if (index === 1) li.innerHTML = '<button>&lt;h2&gt; - サブタイトル</button>';
             if (index === 2) li.innerHTML = '<button>&lt;h3&gt; - 見出し</button>';
-            if (index === 3) li.innerHTML = '<button>&lt;h4&gt; - 小さい見出し（文字）</button>';
+            if (index === 3) li.innerHTML = '<button>&lt;h4&gt; - 小さい見出し</button>';
             if (index === 4) li.innerHTML = '<button>&lt;p&gt; - 文字</button>';
             if (index === 5) li.innerHTML = '<button>&lt;b&gt; - 太文字</button>';
             if (index === 6) li.innerHTML = '<button>&lt;u&gt; - 下線</button>';
@@ -676,9 +763,9 @@ function toggleOtherTags() {
             if (index === 2) li.innerHTML = '<button>&lt;mark&gt; - 強調表示</button>';
             if (index === 3) li.innerHTML = '<button>&lt;h5&gt; - 小さい文字</button>';
             if (index === 4) li.innerHTML = '<button>&lt;span&gt; - 文字サイズ指定</button>';
-            if (index === 5) li.innerHTML = '<button>&lt;marquee&gt; - 右から左に動く</button>';
+            if (index === 5) li.innerHTML = '<button>&lt;marquee&gt; - 右から左</button>';
             if (index === 6) li.innerHTML = '<button>&lt;hr&gt; - 区切り線</button>';
-            if (index === 7) li.innerHTML = '<button>&lt;h6&gt; - かなり小さい文字</button>';
+            if (index === 7) li.innerHTML = '<button>&lt;h6&gt; - 超小さい文字</button>';
             if (index === 8) li.innerHTML = '<button>&lt;br&gt; - 改行</button>';
         });
         otherButtonText.innerHTML = '戻す';
@@ -686,7 +773,6 @@ function toggleOtherTags() {
     }
     isOtherTagsActive = !isOtherTagsActive;
 }
-
 
 
 
