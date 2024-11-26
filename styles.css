@@ -29,7 +29,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 20px auto;
+    margin: 18px auto;
     padding: 25px;
     border-radius: 15px;
     box-shadow: -1px 55px 82px rgba(0, 0, 0, 0.2);
@@ -143,15 +143,25 @@ border: none; /* ボタンの枠線を消す */
 @media (max-width: 768px) {
     /* ボタンを縦並びに */
     button {
+        padding: 10px 20px;
       display: block; /* ボタンを縦並びに */
       width: 100%; /* 横幅を100%にして画面全体を使う */
       box-sizing: border-box; /* パディングを含めた幅を計算 */
-      margin: 10px 0; /* ボタン間に縦の余白を確保 */
+      margin: -5px 0; /* ボタン間に縦の余白を確保 */
+      background-color: rgb(0, 0, 0);
     }
+    .button-container {
+    display: flex;
+    flex-direction: column;  /* 縦一列に並べる */
+    align-items: center;     /* ボタンを中央に配置 */
+    gap: 12px;               /* ボタン間の隙間 */
+    padding: 0 20px;         /* 左右20pxの余白 */
+  }
   
     /* ボタンのスタイルをさらにカスタマイズ */
-    .reset-btn, .expand-btn, .copy-download-btn, .normal-button {
-        background-color: rgba(215, 215, 236, 0.4);
+    .reset-btn, .expand-btn, .copy-download-btn, .reset-button {
+        background-color: rgb(0, 0, 0);
+        height: 47px;             /* ボタンの高さを15pxに設定 */
     }
   
     /* ホバー時のスタイル（オプション） */
@@ -180,7 +190,7 @@ border: none; /* ボタンの枠線を消す */
 .reset-btn:hover,
 .copy-download-btn:hover,
 #reloadBtn:hover {
-    background-color: rgba(232, 232, 236, 0.541);
+    background-color: rgba(102, 105, 106, 0.33);
 text-shadow: 2px 3px 8px rgba(0, 0, 0, 0.2);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 transform: scale(1.05);
@@ -264,7 +274,7 @@ transform: scale(1.05);
 .close-options-btn,
 .reset-btn {
 padding: 0 18px; /* ボタンの大きさを均一に */
-background-color: rgba(212, 212, 220, 0.814); /* 背景色を赤に */
+background-color: rgba(0, 0, 0, 0.814); /* 背景色を赤に */
 color: rgb(255, 255, 255); /* 文字色を白に */
 font-weight: bold; /* 太文字 */
 border: none; /* 枠線を消す */
@@ -281,7 +291,7 @@ font-size: 18px; /* サイズを合わせる */
 box-shadow: 8px 8px 32px rgba(0, 0, 0, 0.15); /* 影を追加 */
 }
 .close-options-btn:hover {
-    box-shadow: inset 5px 5px 30px rgba(0, 0, 0, 0.22); /* 内側に影 */
+    box-shadow: inset 5px 5px 30px rgba(0, 0, 0, 0.16); /* 内側に影 */
 text-shadow: 8px 8px 32px rgba(0, 0, 0, 0.4);
 transform: scale(1.05);
 }
@@ -290,7 +300,8 @@ transform: scale(1.05);
 
 .copy-btn:hover {
 transform: scale(1.05); /* サイズ変更アニメーション */
-border-color: rgba(255, 255, 255, 0.2); /* ホバー時に枠線を追加 */
+border-color: none;
+background-color: rgba(163, 163, 179, 0.4);
 text-shadow: 2px 3px 8px rgba(0, 0, 0, 0.338);
 }
 .close-options-btn
@@ -577,7 +588,7 @@ li.show {
 .resizable {
     width: calc(100% - 24px);
     height: 200px;
-    border-radius: 10px;
+    border-radius: 11px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     padding: 10px;
     font-family: inherit;
