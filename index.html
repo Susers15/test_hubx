@@ -4,48 +4,82 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>プレビュー</title>
-    <link rel="stylesheet" href="styles.css"> <!-- 外部CSSファイルを読み込む -->
-  
+    <link rel="stylesheet" href="test.css"> 
+    <link rel="stylesheet" href="error.css">
+    <!-- 外部CSSファイルとエラー用のCSSを読み込む -->
+    <!-- 最初にアイコンと拡大アニメーションのスタイルを追加 -->
+ 
+
 </head>
 <body>
+ <!-- 残りの元々のHTMLコード -->
     <audio id="pasteSound" src="paste.mp3" preload="auto"></audio>
 
     <div id="startScreen">
-        <textarea id="htmlInput" class="resizable" placeholder="HTMLコードを入力...(Return/Enterを押して反映)"></textarea>
-        <button id="htmlToggle" class="toggle">HTML入力を書き換え</button>
+        <textarea id="htmlInput" class="resizable closed" placeholder="HTMLコードを入力...(Return/Enterを押して反映)"></textarea>
+        <div class="Dock">
+            <div class="container">
+                <label class="switch">
+                    <span class="label-text">HTMLを入力</span>
+                    <input type="checkbox" id="change_toggle">
+                    <span class="slider"></span>
+                    <!-- コピー ボタンの隣に HTML タグボタンを配置 -->
+                    <button class="copy-button" onclick="copyText()">コピー</button>
+                    <button class="normal-button" id="htmlTagsBtn">+</button>
+                    <button class="normal-button" button id="insertBtn">!</button>
+                </label>
+            </div>
+        </div><br>
         <textarea id="cssInput" class="resizable closed" placeholder="CSSコードを入力..."></textarea>
         <button id="cssToggle" class="toggle">CSS入力を書き換え</button>
         <textarea id="jsInput" class="resizable closed" placeholder="JavaScriptコードを入力..."></textarea>
         <button id="jsToggle" class="toggle">JavaScript入力を書き換え</button>
-       <div class="button-container">
-    <button id="resetBtn" class="reset-btn"> × 削除</button>
-    <button id="expandBtn" class="expand-btn">拡大</button>
-    <button id="reloadBtn" class="expand-btn">反映&再読み込み</button> <!-- 追加 -->
-    <button id="copyDownloadBtn" class="copy-download-btn">＋ コピー</button>
-    <button class="normal-button" id="htmlTagsBtn">HTMLタグを追加</button> <div class="overlay" id="htmlTagsMenu">
-        <div class="html-tags-content">
-            <h2>　タグを追加</h2>
-            <ul id="tagList">
-
-<!-- 既存のHTMLタグ一覧 -->
-    <li onclick="insertTag('')"><button>&lt;h1&gt; - ホームページ</button></li>
-
-                <li onclick="insertTag('')"><button>&lt;h2&gt; - サブタイトル</button></li>
-                <li onclick="insertTag('')"><button>&lt;h3&gt; - 見出し</button></li>
-                <li onclick="insertTag('')"><button> &lt;h1&gt;・&lt;h4&gt; - h1とh4</button></li>
-                <li onclick="insertTag()"><button>&lt;p&gt; - 文字</button></li>
-                <li onclick="insertTag('')"><button>&lt;b&gt; - 太文字</button></li>
-                <li onclick="insertTag('')"><button>&lt;u&gt; - 下線</button></li>
-                <li onclick="insertTag('')"><button>&lt;span&gt; - 文字色変更</button></li>
-                <li onclick="insertTag('')"><button>&lt;a&gt; - ハイパーリンク</button></li>
-                <li id="otherButton" onclick="toggleOtherTags()"><button id="otherButtonText">その他</button></li>
-            </ul>
-            <button class="undo-button" onclick="closeTagMenu()">htmlを入力に戻る</button>
+        <div class="button-container">
+            <button id="expandBtn" class="expand-btn">拡大</button>
+            <button id="reloadBtn" class="expand-btn">反映&読み込み</button> <!-- 追加 -->
+            <button id="copyDownloadBtn" class="copy-download-btn">＋ コピー</button>
+            <button id="resetBtn" class="reset-btn">削除する</button>
+            <div class="overlay" id="htmlTagsMenu">
+                <div class="html-tags-content">
+                    <h2>　タグを追加</h2>
+                    <ul id="tagList">
+                        <!-- 既存のHTMLタグ一覧 -->
+                        <li onclick="insertTag('')"><button>&lt;h1&gt; - ホームページ</button></li>
+                        <li onclick="insertTag('')"><button>&lt;h2&gt; - サブタイトル</button></li>
+                        <li onclick="insertTag('')"><button>&lt;h3&gt; - 見出し</button></li>
+                        <li onclick="insertTag('')"><button> &lt;h1&gt;・&lt;h4&gt; - h1とh4</button></li>
+                        <li onclick="insertTag()"><button>&lt;p&gt; - 文字</button></li>
+                        <li onclick="insertTag('')"><button>&lt;b&gt; - 太文字</button></li>
+                        <li onclick="insertTag('')"><button>&lt;u&gt; - 下線</button></li>
+                        <li onclick="insertTag('')"><button>&lt;span&gt; - 文字色変更</button></li>
+                        <li onclick="insertTag('')"><button>&lt;a&gt; - ハイパーリンク</button></li>
+                        <li id="otherButton" onclick="toggleOtherTags()"><button id="otherButtonText">その他</button></li>
+                    </ul>
+                    <button class="undo-button" onclick="closeTagMenu()">htmlを入力に戻る</button>
+                </div>
+            </div>
+            <div class="copy-notification" id="copyNotification"></div>
         </div>
-    </div>
+    </div>    
 
-    <div class="copy-notification" id="copyNotification"></div>
+<!-- iframe内のフォント環境設定-->
+    <script src="font.js"></script>
+
+<!--古いWebブラウザの場合。-->
+    <div class="Dockcontainer" id="message-container">
+        <h1 style="font-size: 85px;">⊗</h1>
+        <h1>全ての機能を使うには<br> ブラウザのアップデートが必要です。</h1>
+   
+        <p>ブラウザをアップデートするか、以前のデバイスの場合、</p>
+        <p>最新のGoogle Chromeから起動してください。</p>
+      </div>
+      <script src="error.js"></script>
+
+
+    <!-- JavaScriptコード（アイコンのクリック処理） -->
     <script>
+  
+
         let htmlTagsMenu = document.getElementById('htmlTagsMenu');
         let htmlTagsBtn = document.getElementById('htmlTagsBtn');
         let tagList = document.getElementById('tagList');
@@ -196,6 +230,7 @@
     case '<h1> - ホームページ':
         // 改行とインデントを含んだHTMLコード
         var htmlContent = `
+
 <html>
 <head>
     <meta charset="UTF-8">
@@ -215,7 +250,7 @@
         <section id="home">
             <h2>・ホーム</h2>
             <p>ここはホームセクションです。簡単な紹介文を記載します。</p>
-            <img src="images/sample-image.jpg" alt="サンプル画像" class="sample-image">
+                <img src="image.png" alt="サンプル画像" class="sample-image" style="width: 50%; height: auto;">
         </section>
 
         <section id="contact">
@@ -358,6 +393,47 @@ document.getElementById('copy-button').addEventListener('click', () => {
         const copyDownloadBtn = document.getElementById('copyDownloadBtn');
         const blurOverlay = document.getElementById('blurOverlay');
         const copyOptions = document.getElementById('copyOptions');
+        const toggle = document.getElementById('change_toggle');
+        const slider = document.querySelector('.slider');
+    
+        
+        // 初期状態でチェックされている場合に入力フィールドを表示
+        if (toggle.checked) {
+            slider.classList.remove('off');
+            htmlInput.classList.remove('closed');
+        }
+
+        toggle.addEventListener('change', function() {
+            if (toggle.checked) {
+                slider.style.backgroundColor = '#4CAF50';  // オン時は緑色
+                slider.classList.remove('off');  // 赤色を解除
+                htmlInput.classList.remove('closed');  // 入力エリアを表示
+                htmlInput.style.height = '250px';  // 高さ280pxで表示
+                htmlInput.style.opacity = 1;  // 入力エリアを表示
+            } else {
+                slider.style.backgroundColor = '#242424';  // 入力なしの場合、灰色
+                slider.classList.remove('off');  // 赤色解除
+                if (htmlInput.value.trim() !== "") {
+                    slider.classList.add('off');  // 入力がある場合は赤色
+                    slider.style.backgroundColor = '#ff0000'; // 赤色に設定
+                }
+                htmlInput.classList.add('closed');  // 入力エリアを非表示
+                htmlInput.style.height = '0';  // 高さを0にして閉じる
+                htmlInput.style.opacity = 0;  // 透明にして閉じる
+            }
+    
+        });
+
+        // 入力がある場合にトグルの色を赤に変える
+        htmlInput.addEventListener('input', function() {
+            if (!toggle.checked && htmlInput.value.trim() !== "") {
+                slider.classList.add('off');  // 入力ありでオフの場合、赤色に変更
+                slider.style.backgroundColor = '#ff0000';  // 赤色に設定
+            } else if (!toggle.checked && htmlInput.value.trim() === "") {
+                slider.style.backgroundColor = '#ccc';  // 入力がない場合は灰色
+                slider.classList.remove('off');
+            }
+        });
         
         function updatePreview() {
             const html = htmlInput.value;
@@ -463,9 +539,10 @@ document.getElementById('copy-button').addEventListener('click', () => {
             handleDragLeave(event, jsInput);
         });
 
-        document.getElementById('htmlToggle').addEventListener('click', () => {
-            toggleInput(htmlInput);
-        });
+       
+       
+    
+
         document.getElementById('cssToggle').addEventListener('click', () => {
             toggleInput(cssInput);
         });
@@ -474,20 +551,29 @@ document.getElementById('copy-button').addEventListener('click', () => {
         });
 
         document.getElementById('resetBtn').addEventListener('click', () => {
-            if (confirm("全て削除しますか？ (はい、いいえ)")) {
-                htmlInput.value = '';
-                cssInput.value = '';
-                jsInput.value = '';
-                updatePreview();
+    if (confirm("全て削除しますか？ (はい、いいえ)")) {
+        htmlInput.value = '';
+        cssInput.value = '';
+        jsInput.value = '';
+        updatePreview();
 
-                [htmlInput, cssInput, jsInput].forEach(input => {
-                    input.style.height = '200px';
-                    input.style.padding = '10px';
-                    input.style.opacity = '1';
-                    input.classList.remove('closed');
-                });
-            }
+        // 各入力ボックスのリセット
+        [htmlInput, cssInput, jsInput].forEach(input => {
+            input.style.height = '200px';
+            input.style.padding = '10px';
+            input.style.opacity = '1';
+            input.classList.remove('closed');
         });
+
+        // iframe の位置とサイズをリセット
+        const iframe = document.querySelector('iframe');
+        iframe.style.width = '100%';
+        iframe.style.height = '300px';
+        iframe.style.marginTop = '40px';
+        iframe.style.marginBottom = '45px';
+    }
+});
+
 
         document.getElementById('expandBtn').addEventListener('click', () => {
             const isExpanded = preview.classList.toggle('preview-expanded');
@@ -534,12 +620,6 @@ copyDownloadBtn.addEventListener('click', () => {
             }
         });
 
-    
-
-
-
-
-
 
       // コピー通知の要素を作成
 
@@ -563,6 +643,14 @@ document.getElementById('copyHtml').addEventListener('click', () => {
         showCopyNotification('HTML');
     });
 });
+
+// コピー処理
+function copyText() {
+            navigator.clipboard.writeText(htmlInput.value).then(() => {
+        // コピー通知を表示
+        showCopyNotification('HTML');
+    });
+};
 
 // CSSのコピー処理
 document.getElementById('copyCss').addEventListener('click', () => {
@@ -617,59 +705,43 @@ document.getElementById('closeOptions').addEventListener('click', closeCopyOptio
 
 
 
-        // リアルタイムプレビューの初期化
-        document.addEventListener('DOMContentLoaded', () => {
-            updatePreview();
-            // 各入力フィールドの変更を監視
-            [htmlInput, cssInput, jsInput].forEach(input => {
-                input.addEventListener('input', updatePreview);
-            });
-        });
 
-        const reloadBtn = document.getElementById('reloadBtn');
-const loadingOverlay = document.createElement('div');
-loadingOverlay.className = 'loading-overlay';
-const loadingMessage = document.createElement('div');
-loadingMessage.className = 'loading-message';
-loadingMessage.innerText = '再読み込み中...';
-loadingOverlay.appendChild(loadingMessage);
-document.body.appendChild(loadingOverlay);
+const reloadBtn = document.getElementById('reloadBtn');
+
+// 再読み込み通知を表示する要素を作成
+const reloadNotification = document.createElement('div');
+reloadNotification.className = 'reload-notification';
+reloadNotification.innerText = '再読み込み中...';
+document.body.appendChild(reloadNotification);
 
 let isLoading = false; // ローディング中のフラグ
+let hideTimeout; // hideTimeoutをグローバルで管理して、前回のsetTimeoutをキャンセルする
 
 reloadBtn.addEventListener('click', () => {
     if (isLoading) return; // すでにローディング中の場合は何もしない
     isLoading = true; // ローディング開始
 
-    // 背景を表示
-    loadingOverlay.style.display = 'flex';
+    // 通知がすでに表示されている場合は前回の非表示アニメーションをキャンセル
+    if (hideTimeout) {
+        clearTimeout(hideTimeout); // 前回の非表示タイマーをクリア
+        reloadNotification.classList.remove('hide'); // hideクラスを削除してスライドダウンとフェードインを再開
+    }
 
-    // アニメーション開始
-    setTimeout(() => {
-        loadingOverlay.style.transform = 'translateY(0)'; // 下にスライドイン
-        loadingOverlay.style.opacity = '1'; // フェードイン
-    }, 0); // スタイルを設定後に実行
+    // 通知を表示する（スライドイン + フェードイン）
+    reloadNotification.classList.add('show'); // スライドダウンとフェードイン
 
-    // 0.5秒後にメッセージを表示（フェードイン）
-    setTimeout(() => {
-        loadingMessage.style.opacity = '1'; // メッセージをフェードイン
-    }, 650); // カーテンの降下開始から0.5秒後に表示
+    // 通知を一定時間後に非表示にする（スライドアップ + フェードアウト）
+    hideTimeout = setTimeout(() => {
+        reloadNotification.classList.add('hide'); // スライドアップしてフェードアウト
+    }, 1200); // 通知を2秒間表示
 
-  
-    // 1.1秒後にフェードアウト開始
+    // 再読み込みの処理（仮）
     setTimeout(() => {
-        loadingOverlay.style.opacity = '0'; // オーバーレイをフェードアウト
-        loadingMessage.style.opacity = '0'; // メッセージもフェードアウト
-        
-        // スライド完了後に非表示にする
-        setTimeout(() => {
-            loadingOverlay.style.display = 'none'; // 完全に非表示に
-            isLoading = false; // ローディング完了
-            updatePreview(); // プレビューを更新
-        }, 250); // フェードアウトの時間
-    }, 1500); // メッセージが表示された後に1.1秒後にフェードアウトを開始
+        isLoading = false; // ローディング完了
+        updatePreview(); // プレビューを更新
+    }, 1800); // 2.5秒後に再読み込み完了
 });
-
+// 703行からここまででreloadBtnの調整ができる。cssも直す
 
 const inputField = document.querySelector('.input-field');
 
@@ -735,6 +807,8 @@ function closeTagMenu() {
     htmlTagsMenu.style.transform = 'scale(0.8)';
     setTimeout(() => {
         htmlTagsMenu.style.display = 'none';
+        isLoading = false; // ローディング完了
+        updatePreview(); // プレビューを更新
     }, 300);
 }
 
@@ -777,5 +851,112 @@ function toggleOtherTags() {
 
 
     </script>
+    <script>
+   document.querySelector("body").addEventListener("dragover", function(event) {
+    event.preventDefault();
+});
+
+document.querySelector("body").addEventListener("drop", function(event) {
+    event.preventDefault();
+
+    const file = event.dataTransfer.files[0];
+    console.log(file);
+    if (file && file.type.match(/^image\//)) {
+        // 背景画像のフェードイン・フェードアウト
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            // 画像を背景に設定する前にフェードアウト
+            document.body.style.transition = 'background-image 0.3s ease-in-out, opacity 0.3s ease-in-out';
+            document.body.style.opacity = 0;
+
+            // 新しい背景画像をセットする
+            setTimeout(function() {
+                document.body.style.backgroundImage = `url(${event.target.result})`;
+
+                // 背景画像の切り替え後にフェードイン
+                setTimeout(function() {
+                    document.body.style.opacity = 1;
+                }, 50);  // 少し待ってからフェードイン
+            }, 300);  // フェードアウトの時間と同じだけ待つ
+        };
+        reader.readAsDataURL(file);
+    }
+});
+       </script>
+
+
+
+<!-- html基本情報をペースト-->
+<script> 
+    const defaultHTML = `<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Webページのタイトル</title>
+</head>
+<body>
+<h1>見出し</h1>
+<p>テキストの例</p> 
+<!-- bodyを編集してページを作成 -->
+</body>
+</html>`;
+
+    let insertCount = 0;
+
+    function insertHTML(replace = false) {
+        const textInput = document.getElementById("htmlInput");
+    
+        insertCount++;
+        
+        if (insertCount > 1 && !replace) {
+            const confirmReplace = confirm("テキストがすでにある場合があります。入力置き換えますか？");
+            if (confirmReplace) {
+                textInput.value = defaultHTML; // 上書き
+            } else {
+                textInput.value += "\n" + defaultHTML; // 追加
+            }
+        } else {
+            textInput.value = defaultHTML;
+        }
+        
+        // iframeを更新
+        preview.srcdoc = textInput.value;
+
+  
+        // カーソルを <body> 内に移動
+        moveCursorToBody();
+    }
+
+    function moveCursorToBody() {
+        const textInput = document.getElementById("htmlInput");
+        const bodyStart = textInput.value.indexOf("<body>") + "<body>\n".length;
+        if (bodyStart !== -1) {
+            textInput.setSelectionRange(bodyStart, bodyStart);
+            textInput.focus();
+        }
+    }
+
+    // `!` ボタン押下時
+    document.getElementById("insertBtn").addEventListener("click", function() {
+        insertHTML();
+    });
+
+    // `htmlInput` を監視
+    document.getElementById("htmlInput").addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            const textInput = document.getElementById("htmlInput");
+            const lines = textInput.value.split("\n");
+            const lastLine = lines[lines.length - 1].trim();
+
+            if (lastLine === "!") {
+                event.preventDefault(); // 改行を防ぐ
+                insertHTML();
+            }
+        }
+    });
+
+</script>
+
 </body>
 </html>
