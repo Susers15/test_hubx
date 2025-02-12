@@ -2,13 +2,13 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 20px;
+    margin: 0px;
+    margin-top: 50px;
     font-family: 'San Francisco', sans-serif;
     background-size: cover;
     background-position: center;
+    background-color: #ffffff;
 }
-
-
 
 .overlay {
     position: fixed;
@@ -26,19 +26,20 @@ body {
 }
 
 #startScreen {
+    backdrop-filter: blur(10px);
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 18px auto;
+    margin: 20px auto;
     padding: 25px;
-    border-radius: 15px;
-    box-shadow: -1px 55px 82px rgba(0, 0, 0, 0.2);
-    max-width: 800px;
+    border-radius: 25px;
+    box-shadow: -1px 12px 60px rgba(0, 0, 0, 0.18);
+    max-width: 720px;
     width: 100%;
     text-align: left;
-    background-color: rgba(232, 232, 236, 0.342);
+    background-color: rgba(198, 198, 198, 0.598);
     transition: all 0.3s ease-out, transform 0.3s ease;
-    z-index: 1; /* #htmlTagsMenuより背面に表示されるようにする */
+    z-index: 1;
 }
 
 /* #htmlTagsMenuが表示されているとき、startScreenのホバーを無効にする */
@@ -75,29 +76,39 @@ none {
     transition: all 0.3s ease-out; /* 必要に応じて遷移を設定 */
 }
 
+
 .toggle {
     width: 100%;
     text-align: center;
     cursor: pointer;
+     backdrop-filter: blur(11px);
     margin-bottom: 10px;
-    padding: 15px;
+    padding: 10px;
+    margin:1px;
     border: none;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    background-color: rgba(212, 212, 220, 0.814);
+    border-radius: 18px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: rgb(255 255 255 / 60%);
     font-weight: bold;
-    font-size: 18px;
+    font-size: 17px;
     color: black;
     transition: all 0.3s ease, transform 0.3s ease;
 }
 
 .toggle:hover {
     box-shadow: 8px 8px 32px rgba(0, 0, 0, 0.15);
-    background-color: rgba(210, 210, 236, 0.4);
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-    transform: scale(1.01);
+    background-color: rgb(255 255 255 / 60%);
+    text-shadow: 1px 1px 12px rgba(0, 0, 0, 0.2);
+    transform: scale(1.03);
     
 }
+
+.toggle:active{
+    box-shadow:inset 8px 8px 32px rgb(255 255 255 / 15%);
+    background-color: rgb(255 255 255 / 50%);
+    transform: scale(1.1);
+}
+
 
 
 
@@ -108,56 +119,91 @@ none {
 }
 
 iframe {
-    width: calc(100% - 36px);
+    margin: 18px auto;
+    padding: 25px;
     height: 300px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 18px;
+    box-shadow: 0 4px 28px rgba(0, 0, 0, 0.15);
     border: none;
     position: relative;
-    z-index: 1;
-    background-color: rgba(212, 212, 220, 0.814);
-    padding: 25px;
+    background-color: rgb(231 231 239 / 50%);
     transition: all 0.5s ease;
-    margin-top:25px
+    margin-top: 40px;
+    margin-bottom: 45px;
+    width: 77% ; /* 最初の幅を800pxに設定 */
+    max-width: 1200px; /* 最大幅を1200pxに設定 */
+    height: 300px;
+    resize: both; /* サイズ変更可能 */
+     backdrop-filter: blur(5px);
+    overflow: auto; /* コンテンツがはみ出さないように */
 }
 
-.button-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 18px;
-    width: 100%;
-    padding: 12px;
-    box-sizing: border-box;
-}
+
+
+
 button {
+    margin-left:10px;
     padding: 15px 25px;
-border-radius: 8px;
-box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-transition: all 0.3s ease;
-font-size: 15px;
-margin: 0 12px;
-border: none; /* ボタンの枠線を消す */
+    border-radius: 15px;
+    box-shadow: 0 4px 22px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    font-size: 15px;
+    border: none; /* ボタンの枠線を消す */
 }
 
 /* スマートフォン用のスタイル（画面幅768px以下） */
 @media (max-width: 768px) {
     /* ボタンを縦並びに */
     button {
-        padding: 10px 20px;
-      display: block; /* ボタンを縦並びに */
-      width: 100%; /* 横幅を100%にして画面全体を使う */
-      box-sizing: border-box; /* パディングを含めた幅を計算 */
-      margin: 6px 0; /* ボタン間に縦の余白を確保 */
-      background-color: rgb(0, 0, 0);
+        padding: 8px 20px;
+        display: block; /* ボタンを縦並びに */
+        width: 100%; /* 横幅を100%にして画面全体を使う */
+        box-sizing: border-box; /* パディングを含めた幅を計算 */
+        margin: 6px 0;
+        background-color: rgba(255, 255, 255, 0.45);
     }
-    .button-container {
+
+.toggle:hover {
+    border-radius:30px;
+    text-shadow: 2px 3px 18px rgb(255 255 255 / 22%);
+    background-color:rgb(98 98 98 / 3%);
+    transform:scale(1.02);
+    box-shadow: inset 8px 8px 32px rgba(0, 0, 0, 0.07); /* 内側に影 */
+}
+    .toggle:active {
+        color:white;
+    background-color:rgb(0 0 0 / 70%);
+    transform:scale(1.11);
+    }
+    
+    .toggle {
+    width: 105%;
+    text-align: center;
+    cursor: pointer;
+     backdrop-filter: blur(11px);
+    margin-bottom: 10px;
+    padding: 10px;
+    margin:1px;
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: rgb(255 255 255 / 70%);
+    font-weight: bold;
+    font-size: 18px;
+
+}
+
+    .Dock .container label {
+    gap: 3px;
     display: flex;
-    flex-direction: column;  /* 縦一列に並べる */
-    align-items: center;     /* ボタンを中央に配置 */
-    gap: 12px;               /* ボタン間の隙間 */
-    padding: 0 20px;         /* 左右20pxの余白 */
-  }
-  
+    align-items: center;
+}
+
+    .copy-button {
+     width:21%;
+     margin-left:8px;
+    }
+
     /* ボタンのスタイルをさらにカスタマイズ */
     .reset-btn, .expand-btn, .copy-download-btn, .reset-button {
         background-color: rgb(0, 0, 0);
@@ -167,79 +213,196 @@ border: none; /* ボタンの枠線を消す */
     /* ホバー時のスタイル（オプション） */
     button:hover {
         box-shadow: 8px 8px 32px rgba(0, 0, 0, 0.15);
+        background-color: rgba(210, 210, 236, 0.4);
         text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
         transform: scale(1.01);
     }
-  }
 
 
+#startScreen {
+border-radius:30px;
+    width: 80%;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 15px;
+    padding-bottom:12px;
+    border-radius: 25px;
+    transition: all 0.3s ease-out, transform 0.3s ease;
+}
+}
+
+/* ボタンを包む親要素のスタイル */
+.button-container {
+    width:110%;
+    padding-top: 12px;
+    box-sizing: border-box;
+    gap: 10px;               /* ボタン間の隙間 */
+    display: flex;           /* 横並びにする */
+    justify-content: center; /* 横方向に中央揃え */
+    align-items: center;     /* 縦方向にも中央揃え */
+    flex-wrap: wrap;         /* 必要に応じて折り返し */
+}
+
+/* ボタンのスタイル */
 .expand-btn, .reset-btn, .copy-download-btn, #reloadBtn {
-padding: 15px 25px;
-border-radius: 8px;
-box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-transition: all 0.3s ease;
-font-size: 15px;
-margin: 0 12px;
-background-color: rgba(255, 255, 255, 0.541);
-color: black;
-border: none; /* ボタンの枠線を消す */
+    padding: 15px 25px;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+    font-size: 15px;
+    margin: 0 10px;           /* ボタン間のスペース */
+    background-color: rgba(255, 255, 255, 0.541);
+    color: black;
+    border: none;            /* ボタンの枠線を消す */
+}
+
+
+.reset-btn:hover{
+    background-color: rgb(255 0 88);
+    transform: scale(1.05);
+    transition: all 0.3s ease;
+transform: scale;
+}
+
+.reset-btn:active {
+    border-radius :50px;
+    transform: scale(1.12);
 }
 
 .expand-btn:hover,
-.reset-btn:hover,
 .copy-download-btn:hover,
 #reloadBtn:hover {
-    background-color: rgba(102, 105, 106, 0.33);
-text-shadow: 2px 3px 8px rgba(0, 0, 0, 0.2);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-transform: scale(1.05);
+text-shadow: 2px 3px 18px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+transform: scale(1.07);
+    background-color:rgb(13 13 13 / 7%);
+    box-shadow: inset 8px 8px 32px rgba(0, 0, 0, 0.07); /* 内側に影 */
 }
+#reloadBtn.popup {
+    border-color: #3498db;
+    box-shadow: 0 0 10px 3px rgba(52, 152, 219, 0.5);
+  }
 
+  #reloadBtn {
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease-in-out;
+  }
+/* プレビューオーバーレイのスタイル */
 .preview-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(255, 255, 255, 0.366);
-    z-index: 9;
+    background-color: rgb(0 0 0 / 71%); /* 背景に透明度を設定 */
+    backdrop-filter: blur(8px);  /* ぼかし効果 */
+    z-index: 9998;  /* 他の要素より前面に表示 */
     display: none;
-    backdrop-filter: blur(10px);
 }
 
+/* プレビュー拡大表示のスタイル */
 .preview-expanded {
     position: fixed;
-    top: 50%;
+    top: 45%;
     left: 50%;
-    width: 85vw;
-    height: 87vh;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    transform: translate(-50%, -50%);
-    z-index: 10;
+    width: 80%;
+    height: 78%;
+    max-width: 88%;
+    max-height: 85%;
+    border-radius: 25px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.25);
+    transform: translate(-50%, -50%); /* 画面中央に配置 */
+    z-index: 99999; /* 最前面に表示 */
     transition: all 0.5s ease;
-    background-color: rgba(255, 255, 255, 0.55);
+    background-color: rgb(255 255 255 / 35%); /* 半透明の背景 */
 }
-
-
 
 
 
 @media (prefers-color-scheme: dark) {
+    /* Body全体の背景と文字色 */
     body {
-        background-color: black;
+        width: 100%;
+        height: 100%;
+        background-color: rgb(0 0 0); /* 半透明の黒いオーバーレイ */
     }
 
-
-
-    #startScreen {
-        background: rgba(21, 21, 21, 0.573);
-        color: rgb(0, 0, 0);
-    }
-
-   
+/* プレビューオーバーレイのスタイル */
+.preview-overlay {
+    transition:all 0.3s ease;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(0 0 0); /* 背景に透明度を設定 */
 }
 
+/* プレビュー拡大表示のスタイル */
+.preview-expanded {
+    transition:all 0.3s ease;
+    position: fixed;
+    top: 45%;
+    left: 50%;
+    width: 80%;
+    height: 78%;
+    max-width: 88%;
+    max-height: 85%;
+    border-radius: 25px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.25);
+    transform: translate(-50%, -50%); /* 画面中央に配置 */
+    z-index: 99999; /* 最前面に表示 */
+    transition: all 0.5s ease;
+    background-color: rgb(255 255 255 / 50%); /* 半透明の背景 */
+}
+
+
+    
+    /* ボタンのスタイル */
+    .expand-btn, .reset-btn, .copy-download-btn, #reloadBtn {
+        padding: 15px 25px;
+        border-radius: 11px;
+        box-shadow: 0 5px 28px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        font-size: 15px;
+        margin: 0 12px;
+        background-color: rgb(255 255 255 / 36%);
+        color: rgb(0 0 0); /* ボタン内の文字色 */
+        border: none; /* ボタンの枠線を消す */
+    }
+
+.toggle {
+    background-color:#000000;
+    color:#ffffff;
+    transition:all 0.5s ease;
+}
+.toggle:hover {
+    background-color:#ffffffa1;
+    color:#000000;
+    border-radius:30px;
+}
+    /* ボタンのホバー時 */
+    .reset-btn:hover {
+        background-color: rgb(188, 0, 66);
+        transform: scale(1.05);
+        transition: all 0.3s ease;
+    }
+
+
+    .expand-btn:hover,
+    .copy-download-btn:hover,
+    #reloadBtn:hover {
+        text-shadow: 2px 3px 18px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+        transform: scale(1.07);
+        background-color: rgb(0 0 0 / 72%);
+        box-shadow: inset 8px 8px 32px rgba(0, 0, 0, 0.07); /* 内側に影 */
+        color: #ffffff; /* ホバー時の文字色も白 */
+    }
+    
+}
 
 
 
@@ -258,40 +421,35 @@ transform: scale(1.05);
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgb(170 170 170 / 34%);
-    backdrop-filter: blur(5px);
+    background-color: rgba(0, 0, 0, 0.34);
+    backdrop-filter: blur(11px);
     display: none;
     z-index: 999;
     justify-content: center;
     align-items: center;
 }
 
-
-
-
-
 .close-options-btn,
 .reset-btn {
-padding: 0 18px; /* ボタンの大きさを均一に */
+padding: 15px; /* ボタンの大きさを均一に */
 background-color: rgba(0, 0, 0, 0.814); /* 背景色を赤に */
 color: rgb(255, 255, 255); /* 文字色を白に */
 font-weight: bold; /* 太文字 */
 border: none; /* 枠線を消す */
-box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* 影を残す */
 transition: transform 0.3s ease-in-out; /* アニメーション */
-box-shadow: inset 8px 8px 32px rgba(0, 0, 0, 0.15); /* 内側に影 */
 }
 
 .close-options-btn {
-padding: 14px; /* ボタンのサイズを統一 */
-background-color: rgba(255, 0, 60, 0.86); /* 背景色を赤に */
-transition: transform 0.2s; /* アニメーション */
+margin-top:15px;
+padding: 11px; /* ボタンのサイズを統一 */
+background-color: rgb(255 0 60 / 86%); /* 背景色を赤に */
+transition: transform 0.3s; /* アニメーション */
 font-size: 18px; /* サイズを合わせる */
 box-shadow: 8px 8px 32px rgba(0, 0, 0, 0.15); /* 影を追加 */
 }
 .close-options-btn:hover {
-    box-shadow: inset 5px 5px 30px rgba(0, 0, 0, 0.16); /* 内側に影 */
-text-shadow: 8px 8px 32px rgba(0, 0, 0, 0.4);
+    background-color:#ff1d8a;
+    transition:all 0.3s ease;
 transform: scale(1.05);
 }
 
@@ -303,19 +461,9 @@ border-color: none;
 background-color: rgba(0, 0, 0, 0.99);
 text-shadow: 2px 3px 8px rgba(0, 0, 0, 0.338);
 }
-.close-options-btn
-  textarea {
-    width: 100%;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    padding: 10px;
-    font-family: inherit;
-    overflow: hidden;
-    max-height: 200px;
-    transition: max-height 0.5s ease, padding 0.5s ease, transform 0.3s ease;
-    resize: none;
-}
+
+
+
 @keyframes fadeInExpand {
 0% {
     display: block; /* 表示時にブロックにする */
@@ -344,9 +492,12 @@ transform: scale(0.8);
 
 
 .copy-options {
-background-color: rgba(242, 242, 242, 0.763); /* 不透明度50%の白 */
-padding: 20px;
-border-radius: 15px;
+background-color: rgb(255 255 255 / 76%); /* 不透明度50%の白 */
+padding-left: 12px;
+padding-right: 12px;
+padding-top:11px;
+padding-bottom:8px;
+border-radius: 20px;
 box-shadow: 0 4px 22px rgba(0, 0, 0, 0.1);
 text-align: center;
 display: none;
@@ -368,30 +519,6 @@ animation: fadeOut 0.5s ease forwards; /* フェードアウト */
 .copy-options {
 animation: fadeInExpand 0.5s ease forwards;
 }
-.loading-overlay {
-position: fixed;
-top: 0;
-left: 0;
-width: 100vw;
-height: 100vh;
-background-color: rgba(98, 98, 98, 0.38);
-backdrop-filter: blur(10px);
-z-index: 999;
-display: none; /* 初めは非表示 */
-justify-content: center;
-align-items: center;
-transform: translateY(-100%); /* 初期位置を画面の上に */
-opacity: 0; /* 初期の不透明度 */
-transition: transform 0.7s ease, opacity 0.7s ease; /* スライドと不透明度のアニメーション */
-}
-
-.loading-message {
-color: rgb(255, 255, 255);
-text-shadow: 2px 12px 32px #000000;
-font-weight: bold;
-opacity: 0; /* 初期の不透明度 */
-transition: opacity 0.5s ease; /* メッセージのフェードイン */
-}
 
 /* #htmlTagsMenuのスタイル */
 #htmlTagsMenu {
@@ -400,11 +527,12 @@ transition: opacity 0.5s ease; /* メッセージのフェードイン */
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgb(184 184 184 / 48%);
+    border-radius: 20px;
     z-index: 9999; /* 前面に表示 */
     display: none;
     opacity: 0;
-    border-radius: 5px;
+    backdrop-filter: blur(10px);  /* 背景のぼかし効果 */
+    -webkit-backdrop-filter: blur(10px);  /* Safari 用のプレフィックス */
     transform: scale(0.8);
     transition: opacity 0.3s, transform 0.3s;
 }
@@ -412,13 +540,18 @@ transition: opacity 0.5s ease; /* メッセージのフェードイン */
 /* htmlTagsMenuのコンテンツのスタイル */
 #htmlTagsMenu .html-tags-content {
     position: absolute;
-    top: 50%;
+    backdrop-filter: blur(10px);  /* 背景のぼかし効果 */
+    -webkit-backdrop-filter: blur(10px);  /* Safari 用のプレフィックス */
+    backdrop-filter: blur(10px);  /* 背景のぼかし効果 */
+    -webkit-backdrop-filter: blur(10px);  /* Safari 用のプレフィックス */
+    top: 33%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: rgba(255, 255, 255, 0.4);
+    background-color: rgb(200 200 205 / 30%);
     padding: 10px;
-    border-radius: 10px;
-    box-shadow: 3px 8px 35px rgba(0, 0, 0, 0.2);
+    margin-top: 8em;
+    border-radius: 20px;
+    box-shadow: 13px 18px 80px rgb(0 0 0 / 45%);
 }
 
 /* ulのスタイル */
@@ -451,27 +584,27 @@ transition: opacity 0.5s ease; /* メッセージのフェードイン */
     text-align: center; /* ボタン内のテキストを中央揃え */
     box-sizing: border-box; /* paddingを含めて幅計算 */
     margin: 0; /* ボタンの周りの余白をリセット */
-    background-color: rgba(255, 255, 255, 0.61); /* ボタンの背景色は黒 */
-    color: black; /* ボタンの文字色は白 */
+    background-color: rgb(255 255 255 / 61%); /* ボタンの背景色は黒 */
+    color: rgb(0 0 0); /* ボタンの文字色は白 */
     border: none; /* 枠線なし */
-    border-radius: 5px; /* 丸みのある角 */
-    text-shadow:1px 5px 8px rgba(15, 15, 15, 0.3);
+    border-radius: 11px; /* 丸みのある角 */
+    text-shadow:1px 5px 8px rgb(15 15 15 / 15%);
     transition: background-color 0.3s, transform 0.3s; /* アニメーションを追加 */
 }
 
 /* .html-tags-menuのスタイル（ライトモード） */
 .html-tags-menu {
+    backdrop-filter: blur(10px);  /* 背景のぼかし効果 */
+    -webkit-backdrop-filter: blur(10px);  /* Safari 用のプレフィックス */
     padding: 5px;
-    border-radius: 5px;
     display: none;
     z-index: 1000;
-    max-width: 300px;
+    max-width:300px;
     margin: 0 auto;
     overflow-y: auto;
     max-height: 80vh;
     opacity: 0;
-    transform: scale(0.8);
-    
+    transform: scale(1.1);
     transition: opacity 0.3s ease-in-out, transform 0.5s ease-in-out;
     
 }
@@ -481,7 +614,7 @@ transition: opacity 0.5s ease; /* メッセージのフェードイン */
 /* .html-tags-contentのスタイル */
 .html-tags-content {
     padding: 20px; /* 520pxは誤植かと思われます。余白を20pxに変更 */
-    color: black;
+    color: rgb(0, 0, 0);
     margin-top: -20px;
     text-shadow: 2px 10px 15px rgba(111, 111, 111, 0.63);
 }
@@ -490,21 +623,15 @@ transition: opacity 0.5s ease; /* メッセージのフェードイン */
 
 /* ボタンのホバー時のスタイル */
 button:hover {
-    transform: scale(0.97);
+    transform: scale(0.95);
 }
 
 /* ボタンのアクティブ時のスタイル */
 button:active {
-    transform: scale(0.95);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transform: scale(1.01);
 }
 
-/* normal-buttonのスタイル */
-.normal-button {
-    background-color: rgba(0, 0, 0, 1);
-    color: white;
-    box-shadow: 1 5px 7px rgba(0, 0, 0, 0.300);
-}
+
 
 /* ulタグのグリッドレイアウト */
 ul {
@@ -526,6 +653,7 @@ li {
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
+
 /* liタグが表示されたとき */
 li.show {
     opacity: 1;
@@ -535,30 +663,27 @@ li.show {
 
 .copy-notification {
     position: fixed;
-    top: 50%;
+    top: 85%;
     left: 50%;
     transform: translate(-50%, -50%);
-    padding: 9px;
-    background-color: rgb(236, 236, 236);
-    border: 0.1px solid rgb(200, 200, 200);
-    border-radius: 9px;
-    color: black;
+    padding: 11px;
+    background-color: rgb(255 255 255 / 70%);
+    border: 0.1px solid rgb(214 214 214 / 6%);
+    border-radius: 20px;
+    color: #000000;
+    box-shadow:inset 0 4px 18px rgba(0, 0, 0, 0.5);
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
-    font-size: 11px; /* フォントサイズ */
+    font-size: 13px; /* フォントサイズ */
     z-index: 9999; /* 最前面に表示 */
-    
-    /* 文字を中央揃え */
-    display: flex;
-    justify-content: center;  /* 横方向の中央揃え */
-    align-items: center;      /* 縦方向の中央揃え */
+   
 }
 
 
 .undo-button {
     margin-top: 10px;
-    background-color: #f44336;
+    background-color: #ff000d;
     color: white;
     font-weight: bold;
     border: none;
@@ -566,9 +691,8 @@ li.show {
     text-align: center;
     padding: 15px;
     width: 100%; /* 必要に応じて幅を調整 */
-    
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     margin-left: auto;
     margin-right: auto;
 }
@@ -576,44 +700,89 @@ li.show {
 
 .undo-button:hover {
     transform: scale(1.03);
+    transition :all 0.33s ease;
+    background-color: #ff1f5e;
 }
 
 .undo-button:active {
-    transform: scale(0.95);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    border-radius:50px;
+    transform: scale(1.07);
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
 }
 
-
 .resizable {
-    width: calc(100% - 24px);
+    padding: 20px;
+    width: calc(100% - 5px);  /* 親要素の幅に対して少しの余白を取る */
     height: 200px;
-    border-radius: 11px;
+    border-radius: 18px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 10px;
     font-family: inherit;
     overflow: auto;
     border: none;
     margin: 12px;
     transition: height 0.5s ease, padding 0.5s ease, opacity 0.5s ease;
-    background-color: rgb(248, 248, 248);
+    background-color: rgba(255, 255, 255, 0.55);
     color: rgba(0, 0, 0, 0.883);
-    transition: transform 0.3s ease, box-shadow 0.3s ease, height 0.5s ease, padding 0.5s ease, opacity 0.5s ease;
+    transition: transform 0.5s ease, box-shadow 0.7s ease, height 0.6s ease, padding 0.7s ease, opacity 0.6s ease;
+    resize: both; /* 横・縦両方のサイズ変更を許可 */
+    box-sizing: border-box;
+    max-width: calc(100vw - 80px);  /* 画面幅から余白を除いた最大幅 */
+    max-height: calc(100vh - 80px); /* 画面高さから余白を除いた最大高さ */
 }
 
-
-
-
-
+/* 768px以上の場合にリサイズを有効化 */
+@media (min-width: 768px) {
+    .resizable {
+        resize: both; /* 横・縦両方のサイズ変更を許可 */
+        max-width: calc(100vw - 6px);  /* 画面幅から余白を除いた最大幅 */
+        max-height: calc(100vh - 6px); /* 画面高さから余白を除いた最大高さ */
+    }
+}
 .resizable:hover {
+    transition: all 0.33s ease;
     transform: scale(1.02);
     box-shadow: -1px 5px 82px rgba(0, 0, 0, 0.2);
-    background-color: rgba(232, 232, 238, 0.342);
+    background-color: rgba(255, 255, 255, 0.72);
 }
+/* その他ボタンがアクティブの時のスタイル */
 .other-button-active {
     opacity: 0.65;
-    background-color: rgba(0, 0, 0, 0.374);
-    border-radius: 8px;
+    background-color: rgb(11, 185, 121);
+    box-shadow:inset -1px 5px 82px rgba(0, 0, 0, 0.2);
+    border-radius: 14px;
     transition: opacity 0.3s ease-in-out, transform 0.5s ease-in-out;
+    transform: scale(1.01); /* アクティブ時に少し縮小 */
+}
+
+/* その他ボタンがアクティブ時のアニメーション */
+.other-button-active {
+    animation: activeButtonAnimation 0.5s ease-in-out forwards;
+}
+
+/* アクティブボタンのアニメーション */
+@keyframes activeButtonAnimation {
+    0% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+    50% {
+        transform: scale(1.01);
+        opacity: 0.75;
+    }
+    100% {
+        transform: scale(1.01);
+        opacity: 0.65;
+    }
+}
+
+/* アクティブが解除されたときのスタイル */
+.other-button {
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+/* アクティブ解除時のアニメーション */
+.other-button:not(.other-button-active) {
+    opacity: 0; /* フェードアウト */
 }
 
 
@@ -631,5 +800,229 @@ li.show {
 .copy-options.fade-out {
     animation: fadeOut 0.5s forwards; /* 同じくフェードアウトアニメーション */
 }
+/* .Dockの調整 */
+.Dock {
+    display: flex;
+    flex-direction: column;
+    padding: 5px; /* 内部の要素に対して上下左右に5pxの余白を追加 */
+    border-radius: 50px;
+    box-shadow: -1px 15px 32px rgba(0, 0, 0, 0.1);
+    width: auto;
+    background-color: rgb(255 255 255 / 10%);
+    transition: all 0.3s ease-out, transform 0.3s ease;
+    z-index: 1;
+    height: auto;
+}
+
+/* .Dock 内の要素に対して上下左右5pxの余白 */
+.Dock > * {
+    margin: 5px; /* 子要素に対して5pxの余白 */
+}
 
 
+.Dock:hover {
+    background-color: rgb(255 255 255 / 23%);
+    transform: scale(1.05);
+}
+
+/* トグルスイッチのスタイル */
+.switch {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+    cursor: pointer;
+    height: 34px;
+}
+
+.label-text {
+    padding-right: 11px;
+    font-size: 16.5px;
+    text-shadow: 3px 1px 22px rgba(0, 0, 0, 0.147);
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    background-color: #333333;  /* 初期の灰色 */
+    border-radius: 34px;
+    box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.18);
+    transition: 0.4s;
+}
+
+.slider:before {
+    content: "";
+    position: absolute;
+    height: 29px;
+    width: 29px;
+    border-radius: 50%;
+    background-color: rgb(255, 255, 255);
+    transition: 0.4s;
+    left: 2.5px;
+    bottom: 2.5px;
+    transition: opacity 1s ease-in-out, transform 0.4s ease;
+}
+
+.slider:hover {
+    transform: scale(1.05);
+}
+
+.slider:active:before {
+    transform: scale(1.65); /* クリック時に少し拡大 */
+    transition:0.3s ease;
+  }
+
+
+/* トグルがオンのときの緑色 */
+input:checked + .slider {
+    background-color: hsl(149, 100%, 51%);  /* オンの時は緑 */
+    box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.18);
+}
+
+/* トグルがオンのときの緑色スライダーの位置 */
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* トグルがオフのときに赤色 */
+.switch .slider.off {
+    background-color: #ff0000; /* 入力がある時に赤色 */
+}
+
+/* コピー ボタン */
+.copy-button {
+    height: 43px;
+    padding: 0 17px;
+    background-color: rgba(244, 244, 243, 0.755);
+    color: rgb(0, 0, 0);
+    border-radius: 26px;
+    border: none;
+    opacity: 0.7;
+    cursor: pointer;
+    font-size: 14.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 1px 1px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.18);
+    transition: opacity 1s ease-in-out, transform 0.4s ease;
+    margin-right: 1px; /* ボタン間のスペース */
+}
+
+.copy-button:hover {
+    transform: scale(1.05);
+    background-color: #ffffffcd;
+    opacity: 1;
+}
+.copy-button:active { 
+    transform: scale(1.32); /* クリック時に少し拡大 */
+    transition:0.3s ease;
+  }
+
+/* + ボタン (htmlTagsBtn) */
+#htmlTagsBtn {
+    height: 41px;
+    background-color: rgba(244, 244, 243, 0.755);
+    color: rgb(0, 0, 0);
+    border-radius: 25px;
+    border: none;
+    opacity: 0.7;
+    cursor: pointer;
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 1px 1px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.18);
+    transition: opacity 1s ease-in-out, transform 0.4s ease;
+}
+
+/* + ボタン hover時 */
+#htmlTagsBtn:hover {
+    transform: scale(1.1);
+    background-color: #ffffffcd;
+    opacity: 1;
+}
+
+#htmlTagsBtn:active {
+    transform: scale(1.36); /* クリック時に少し拡大 */
+    transition:0.3s ease;
+}
+
+
+/* コピー ボタンと + ボタンを横並びにする */
+.Dock .container label {
+    display: flex;
+    align-items: center;
+    width: 100%; /* 横並びの要素が横幅を使い切るように */
+}
+
+       
+.normal-button {
+    padding: 0; /* 内側の余白をリセット */
+    height: 42px;
+    width: 42px;
+    background-color: rgba(244, 244, 243, 0.6);
+    color: rgb(0, 0, 0);
+    border-radius: 50%;
+    border: none;
+    opacity: 0.7;
+    cursor: pointer;
+    font-size: 23px; /* フォントサイズを小さくすることで中央揃えを保つ */
+    display: flex; /* フレックスボックスを使用 */
+    justify-content: center; /* 水平方向の中央揃え */
+    align-items: center; /* 垂直方向の中央揃え */
+    box-shadow: inset 1px 1px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.18);
+    transition: opacity 1s ease-in-out, transform 0.4s ease;
+}
+
+/* 以下をなおせばReloadの修正ができる。jsも直す必要がある */
+/* styles.css */
+
+
+/* 再読み込み通知 */
+.reload-notification {
+    position: fixed;
+    top: -80px; /* 初期位置を画面外に設定 */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ffffffdd;
+    color: #000000;
+    box-shadow: 0 5px 22px rgba(0, 0, 0, 0.2); /* アイコンの影 */
+    padding: 12px 25px;
+    border-radius: 32px;
+    font-size: 14px;
+    opacity: 0;
+    transition: top 0.7s cubic-bezier(0.4, 0.8, 0.3, 1), /* スライドイン */
+    opacity 0.7s ease-in-out; /* フェードイン */
+    z-index: 1000; /* オーバーレイより上に表示 */
+}
+#insertBtn {
+    background-color: black;
+    color: white;
+}
+
+#insertBtn:hover {
+    transform: scale(1.1);
+}
+/* スライドダウン + フェードイン */
+.reload-notification.show {
+    top: 50px; /* 通知がスライドダウンする位置 */
+    opacity: 1; /* フェードイン */
+}
+
+/* スライドアップ + フェードアウト（滑らかに） */
+.reload-notification.hide {
+    top: -80px; /* 非表示のために上にスライドアップ */
+    opacity: 0; /* フェードアウト */
+    transition: top 0.8s cubic-bezier(0.5, 0.2, 0.25, 1), /* スライドアップ */
+                opacity 0.3s ease-in-out; /* フェードアウト */
+}
