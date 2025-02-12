@@ -1,0 +1,62 @@
+ /* ダイアログのフェードインと拡大 */
+ @keyframes fadeInExpand {
+    0% {
+      opacity: 0;
+      transform: scale(0.77);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* テキストのスライドアップ */
+  @keyframes slideUp {
+    0% {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .Dockcontainer {
+    text-align: center;
+    background-color: white;
+    border: none;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 22px rgba(0, 0, 0, 0.2);
+    display: none;  /* 初期状態では非表示 */
+    animation: fadeInExpand 0.5s ease-out;
+    max-width: 780px;
+    width: 100%;
+    margin:20px;
+  }
+
+
+  h1 {
+    font-size: 22px;
+    color: #ff0800;
+    opacity: 0; /* 初期状態で非表示 */
+    animation: slideUp 0.3s ease-out forwards; /* 1行目のアニメーション */
+  }
+
+
+  h1:nth-child(1) {
+    animation-delay: 0s; /* 1行目 */
+  }
+
+  h1:nth-child(2) {
+    animation-delay: 0.22s; /* 2行目 */
+  }
+
+  /* pのスライドアップは適用しない */
+  p {
+    font-size: 16px;
+    color: #333;
+    opacity: 1;  /* 初期状態で表示 */
+    animation: none;  /* アニメーションを消す */
+  }
